@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
       case LoginErrors.ArentFillAllFields:
         // ignore: use_build_context_synchronously
         showAlertDialog(
-            title: "Error", text: "Didn\'t fill all fields", context: context);
+            title: "Error", text: "Didn't fill all fields", context: context);
         break;
       case LoginErrors.UnKnow:
         // ignore: use_build_context_synchronously
@@ -83,8 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
-                child: Container(),
                 flex: 2,
+                child: Container(),
               ),
               SvgPicture.asset(
                 'assets/ic_instagram.svg',
@@ -114,7 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
               InkWell(
                 onTap: loginUser,
                 child: Container(
-                  child: const Text('Log in'),
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -125,34 +124,35 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       color: blueColor),
+                  child: const Text('Log in'),
                 ),
               ),
               const SizedBox(
                 height: 12,
               ),
               Flexible(
-                child: Container(),
                 flex: 2,
+                child: Container(),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: Text("Don't have an account?"),
                     padding: const EdgeInsets.symmetric(
                       vertical: 8,
                     ),
+                    child: const Text("Don't have an account?"),
                   ),
                   GestureDetector(
                     onTap: navigateToSignup,
                     child: Container(
-                      child: Text("Sing up.",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          )),
                       padding: const EdgeInsets.symmetric(
                         vertical: 8,
                       ),
+                      child: const Text("Sing up.",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
                   ),
                 ],

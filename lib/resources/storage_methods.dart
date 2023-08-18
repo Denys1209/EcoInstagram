@@ -23,4 +23,16 @@ class StorageMethods {
     String downloadUrl = await snap.ref.getDownloadURL();
     return downloadUrl;
   }
+
+  Future<List<String>> uploadImagesToStorage(
+    String childName,
+    List<Uint8List> files,
+  ) async {
+    List<String> urls = [];
+    for (var file in files) {
+      urls.add(await uploadImageToStorage(childName, file, false));
+    }
+    
+    return urls;
+  }
 }

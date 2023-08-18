@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/utils/colors.dart';
-import 'package:instagram_clone/widgets/Buttom_with_icom.dart';
-import 'package:instagram_clone/screens/add_pollution_point_screen.dart';
+import 'package:instagram_clone/widgets/buttom_with_icom.dart';
 
 void MyShowBottomSheet(BuildContext context) {
-  GoToAddPostScreen() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AddScreenPollutionPoint();
-    }));
-  }
-
   showModalBottomSheet(
     context: context,
     enableDrag: true,
@@ -39,14 +32,14 @@ void MyShowBottomSheet(BuildContext context) {
                 icon: IconData(0xe752, fontFamily: 'MaterialIcons'),
                 text: "add a poin",
               ),
-              ButtonWithIcon(
-                  icon: IconData(0xe752, fontFamily: 'MaterialIcons'),
-                  text: "add a poin",
-                  onPressed: null),
-              ButtonWithIcon(
-                  icon: IconData(0xe752, fontFamily: 'MaterialIcons'),
-                  text: "add a poin",
-                  onPressed: null),
+              ButtonWithIcon3(
+                icon: IconData(0xf643, fontFamily: 'MaterialIcons'),
+                text: "add a cleaner event",
+              ),
+              ButtonWithIcon4(
+                  icon: IconData(0xe122, fontFamily: 'MaterialIcons'),
+                  text: "add an event",
+                  ),
               ButtonWithIcon(
                   icon: IconData(0xe752, fontFamily: 'MaterialIcons'),
                   text: "add a poin",

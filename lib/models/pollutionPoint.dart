@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 class PollutionPoint {
   final String description;
@@ -9,12 +7,13 @@ class PollutionPoint {
   final String postId;
   final DateTime datePublished;
   final String postUrl;
+  final String eventId;
   final String profImage;
   final double LAT;
   final double LNG;
   final likes;
 
-  const PollutionPoint(
+  PollutionPoint(
       {required this.description,
       required this.uid,
       required this.username,
@@ -24,7 +23,9 @@ class PollutionPoint {
       required this.profImage,
       required this.likes,
       required this.LAT,
-      required this.LNG});
+      required this.LNG,
+      required this.eventId,
+      });
 
   Map<String, dynamic> toJson() => {
         "description": description,
@@ -37,6 +38,7 @@ class PollutionPoint {
         "likes": likes,
         "LAT": LAT,
         "LNG": LNG,
+        "eventId": eventId,
       };
 
   static PollutionPoint fromSnap(DocumentSnapshot snap) {
@@ -53,6 +55,7 @@ class PollutionPoint {
       likes: snapshot['likes'],
       LAT: snapshot['LAT'],
       LNG: snapshot['LNG'],
+      eventId: snapshot['eventId'],
     );
   }
 }

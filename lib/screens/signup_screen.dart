@@ -135,8 +135,8 @@ class _SignupScreenState extends State<SignupScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
-                child: Container(),
                 flex: 2,
+                child: Container(),
               ),
               SvgPicture.asset(
                 'assets/ic_instagram.svg',
@@ -208,13 +208,6 @@ class _SignupScreenState extends State<SignupScreen> {
               InkWell(
                 onTap: signUpUser,
                 child: Container(
-                  child: _isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: primaryColor,
-                          ),
-                        )
-                      : const Text('Sign up'),
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -225,34 +218,41 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       color: blueColor),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: primaryColor,
+                          ),
+                        )
+                      : const Text('Sign up'),
                 ),
               ),
               const SizedBox(
                 height: 12,
               ),
               Flexible(
-                child: Container(),
                 flex: 2,
+                child: Container(),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: Text("Don't have an account?"),
                     padding: const EdgeInsets.symmetric(
                       vertical: 8,
                     ),
+                    child: const Text("Don't have an account?"),
                   ),
                   GestureDetector(
                     onTap: navigateToLogin,
                     child: Container(
-                      child: Text("Log in.",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          )),
                       padding: const EdgeInsets.symmetric(
                         vertical: 8,
                       ),
+                      child: const Text("Log in.",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
                   ),
                 ],

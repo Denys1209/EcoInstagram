@@ -45,11 +45,13 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
     }
   }
 
+  
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: mobileBackgroundColor,
         centerTitle: false,
         title: SvgPicture.asset(
@@ -82,7 +84,7 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(left: 8),
+                      padding: const EdgeInsets.only(left: 8),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,7 +114,12 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
                             children: ['Delete']
                                 .map(
                                   (e) => InkWell(
-                                    onTap: () {},
+                                    onTap: () async {
+                                      FirestoreMethods().deletePollutionPoint(
+                                          widget.snap['postId']);
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 12, horizontal: 16),
@@ -235,12 +242,12 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DefaultTextStyle(
-                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
                     child: Text(
                       '${widget.snap['likes'].length} likes',
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                   Container(
