@@ -9,7 +9,9 @@ import 'package:provider/provider.dart';
 
 class CommentsScreen extends StatefulWidget {
   final snap;
-  const CommentsScreen({super.key, required this.snap});
+  final Stream<QuerySnapshot<Map<String, dynamic>>> stream;
+  final Function(String text) onTap;
+  const CommentsScreen({super.key, required this.snap, required this.stream, required this.onTap});
 
   @override
   State<CommentsScreen> createState() => _CommentsScreenState();
@@ -35,15 +37,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
         centerTitle: false,
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('pollutionPoints')
-            .doc(widget.snap['postId'])
-            .collection('comments')
-            .orderBy(
-              'datePublished',
-              descending: true,
-            )
-            .snapshots(),
+        stream: widget.stream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -87,13 +81,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
               ),
               InkWell(
                 onTap: () async {
-                  await FirestoreMethods().postComment(
-                    widget.snap['postId'],
-                    _commentController.text,
-                    user.uid,
-                    user.username,
-                    user.photoUrl,
-                  );
+                  await widget.onTap(_commentController.text);
                   setState(() {
                     _commentController.text = "";
                   });

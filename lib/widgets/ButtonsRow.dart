@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/utils/colors.dart';
 
 class ButtonRow extends StatefulWidget {
   @override
-  final howManyButtons;
   final texts;
   final functions;
   final startColor;
   final endColor;
   const ButtonRow(
       {super.key,
-      required this.howManyButtons,
       required this.endColor,
       required this.startColor,
       required this.texts,
@@ -19,39 +18,42 @@ class ButtonRow extends StatefulWidget {
 }
 
 class _ButtonRowState extends State<ButtonRow> {
-  int selectedButtonIndex = -1;
+  int selectedButtonIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (int index = 0; index < widget.howManyButtons; index++)
-          TextButton(
-            child: Text(widget.texts[index]),
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(
-                  index == selectedButtonIndex
-                      ? widget.endColor
-                      : widget.startColor),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(
-                      color: index == selectedButtonIndex
-                          ? widget.endColor
-                          : widget.startColor),
+        for (int index = 0; index < 2; index++)
+          Container(
+            child: TextButton(
+              onPressed: () {
+                setState(() {
+                  selectedButtonIndex = index;
+                });
+                if (widget.functions[index] != null) {
+                  widget.functions[index]();
+                }
+              },
+              child: Container(
+                padding: EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                  color: mobileBackgroundColor,
+                  border: Border.all(color: primaryColor),
                 ),
+                alignment: Alignment.center,
+                child: Text(
+                  widget.texts[index],
+                  style: TextStyle(
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: MediaQuery.of(context).size.height * 0.05,
               ),
             ),
-            onPressed: () {
-              setState(() {
-                selectedButtonIndex = index;
-              });
-              if (widget.functions[index] != null) {
-                widget.functions[index]();
-              }
-            },
           ),
       ],
     );

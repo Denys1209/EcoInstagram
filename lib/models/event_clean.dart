@@ -1,18 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EventClean {
-  final DateTime date;
+  final String name;
+  final DateTime startDate;
   final String description;
   final List<String> subscribers;
   final List<String> photos;
   final List<String> points;
   final String organizationId;
+  final String organizationsName;
+  final String profImage;
   final String id;
   final double LAT;
   final double LNG;
+  final likes;
 
   EventClean({
-    required this.date,
+    required this.name,
+    required this.startDate,
     required this.LAT,
     required this.LNG,
     required this.description,
@@ -21,10 +26,14 @@ class EventClean {
     required this.organizationId,
     required this.id,
     required this.points,
+    required this.likes,
+    required this.organizationsName,
+    required this.profImage,
   });
 
   Map<String, dynamic> toJson() => {
-        "date": date,
+        "name": name,
+        "startDate": startDate,
         "LAT": LAT,
         "LNG": LNG,
         "description": description,
@@ -32,14 +41,17 @@ class EventClean {
         "photos": photos,
         "points": points,
         "organizationId": organizationId,
+        "organizationsName": organizationsName,
+        "profImage": profImage,
         "id": id,
+        'likes': likes,
       };
 
-  static EventClean fromSnap(DocumentSnapshot documentSnapshot) 
-  {
+  static EventClean fromSnap(DocumentSnapshot documentSnapshot) {
     var snap = documentSnapshot.data() as Map<String, dynamic>;
     return EventClean(
-      date: snap['date'],
+      name: snap['name'],
+      startDate: snap['startDate'],
       LAT: snap['LAT'],
       LNG: snap['LNG'],
       description: snap['description'],
@@ -48,6 +60,9 @@ class EventClean {
       organizationId: snap['organizationId'],
       id: snap['id'],
       points: snap['points'],
+      likes: snap['likes'],
+      organizationsName: snap['organizationsName'],
+      profImage: snap['profImage'],
     );
   }
 }

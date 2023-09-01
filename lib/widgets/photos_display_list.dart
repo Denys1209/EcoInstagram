@@ -93,7 +93,7 @@ class _PhotosListDisplayState extends State<PhotosListDisplay> {
       children: [
         Container(
           alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width * 0.8,
+          width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 0.4,
           decoration: widget.photos.isEmpty
               ? BoxDecoration(
@@ -130,7 +130,8 @@ class _PhotosListDisplayState extends State<PhotosListDisplay> {
             },
           ),
         ),
-        widget.canAddPhotos && (widget.canAddMoreThanOnePhoto || widget.photos.length < 1)
+        widget.canAddPhotos &&
+                (widget.canAddMoreThanOnePhoto || widget.photos.length < 1)
             ? Align(
                 alignment: Alignment.center,
                 child: IconButton(
@@ -144,7 +145,7 @@ class _PhotosListDisplayState extends State<PhotosListDisplay> {
             : Container(),
         Positioned(
           top: 0,
-          right: 45,
+          right: 0,
           child: widget.photos.isEmpty
               ? Text('')
               : Text(

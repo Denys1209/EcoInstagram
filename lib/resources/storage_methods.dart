@@ -30,7 +30,7 @@ class StorageMethods {
   ) async {
     List<String> urls = [];
     for (var file in files) {
-      urls.add(await uploadImageToStorage(childName, file, false));
+      urls.add(await uploadImageToStorage(childName, file, true));
     }
     
     return urls;

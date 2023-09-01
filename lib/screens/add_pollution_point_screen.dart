@@ -7,6 +7,8 @@ import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
+import 'package:instagram_clone/widgets/follow_button.dart';
+import 'package:instagram_clone/widgets/photos_display_list.dart';
 import 'package:provider/provider.dart';
 import 'package:instagram_clone/providers/currect_location_provider.dart';
 
@@ -19,7 +21,7 @@ class AddScreenPollutionPoint extends StatefulWidget {
 }
 
 class _AddScreenPollutionPointState extends State<AddScreenPollutionPoint> {
-  Uint8List? _file;
+  List<Uint8List> _photos = List.empty(growable: true);
   final TextEditingController _descriptionController = TextEditingController();
   Position? _currentPosition;
   bool _uploading = false;
@@ -29,6 +31,11 @@ class _AddScreenPollutionPointState extends State<AddScreenPollutionPoint> {
     String username,
     String profImage,
   ) async {
+    if (_photos.length == 0) {
+      showSnackBar("you must add a photo", context);
+      return;
+    }
+    if (_descriptionController.text == null) _descriptionController.text = "";
     try {
       setState(() {
         _uploading = true;
@@ -36,7 +43,7 @@ class _AddScreenPollutionPointState extends State<AddScreenPollutionPoint> {
       _currentPosition = await CurrentLocationProvider().getCurrentLocation();
       String res = await FirestoreMethods().uploadPoint(
           _descriptionController.text,
-          _file!,
+          _photos[0],
           uid,
           username,
           profImage,
@@ -55,37 +62,6 @@ class _AddScreenPollutionPointState extends State<AddScreenPollutionPoint> {
     Navigator.of(context).pop();
   }
 
-  void _selectImage(BuildContext context) async {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return SimpleDialog(
-          title: const Text('Create a Post'),
-          children: [
-            SimpleDialogOption(
-              padding: const EdgeInsets.all(20),
-              child: const Text("Take a photo"),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                Uint8List file = await pickImage(ImageSource.camera);
-                setState(() {
-                  _file = file;
-                });
-              },
-            ),
-            SimpleDialogOption(
-              padding: const EdgeInsets.all(20),
-              child: const Text("cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -98,87 +74,45 @@ class _AddScreenPollutionPointState extends State<AddScreenPollutionPoint> {
     final User user = Provider.of<UserProvider>(context).getUser;
     return !_uploading
         ? Scaffold(
-            appBar: AppBar(
-              backgroundColor: mobileBackgroundColor,
-              automaticallyImplyLeading: false,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {},
-              ),
-              title: const Text('Post to'),
-              centerTitle: false,
-              actions: [
-                TextButton(
-                  onPressed: () => {
-                    postPoint(user.uid, user.username, user.photoUrl),
-                  },
-                  child: const Text(
-                    'Post',
-                    style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+            appBar: null,
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.1,
+                  ),
+                  Align(
+                    child: PhotosListDisplay(
+                      canAddPhotos: true,
+                      photos: _photos,
+                      selectFormGallery: false,
+                      canAddMoreThanOnePhoto: false,
                     ),
                   ),
-                ),
-              ],
-            ),
-            body: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        user.photoUrl,
-                      ),
+                  TextField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(
+                      labelText: 'Type a description',
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: TextField(
-                        controller: _descriptionController,
-                        decoration: const InputDecoration(
-                          hintText: 'Write a caption...',
-                          border: InputBorder.none,
-                        ),
-                        maxLines: 8,
-                      ),
+                    maxLines: 3,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 30,
                     ),
-                    SizedBox(
-                      height: 45,
-                      width: 45,
-                      child: AspectRatio(
-                        aspectRatio: 487 / 451,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: _file != null
-                                ? DecorationImage(
-                                    image: MemoryImage(_file!),
-                                    fit: BoxFit.fill,
-                                    alignment: FractionalOffset.topCenter,
-                                  )
-                                : const DecorationImage(
-                                    image: NetworkImage(
-                                        "https://images.unsplash.com/photo-1637775297509-19767f6fc225?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=627&q=80"),
-                                    fit: BoxFit.fill,
-                                    alignment: FractionalOffset.topCenter,
-                                  ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => _selectImage(context),
-                      icon: const Icon(Icons.upload_file),
+                    child: FollowButton(
+                      backgroundColor: Colors.black,
+                      borderColor: Colors.white,
+                      function: () {
+                        postPoint(user.uid, user.username, user.photoUrl);
+                      },
+                      text: "create a new polution point",
+                      textColor: Colors.white,
+                      width: MediaQuery.of(context).size.width * 0.8,
                     ),
-                  ],
-                )
-              ],
+                  ),
+                ],
+              ),
             ),
           )
         : const Center(

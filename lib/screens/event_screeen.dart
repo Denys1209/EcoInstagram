@@ -1,40 +1,61 @@
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram_clone/models/event.dart';
 import 'package:instagram_clone/models/user.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/screens/comments_screen.dart';
+import 'package:instagram_clone/screens/user_on_event_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
+import 'package:instagram_clone/widgets/follow_button.dart';
 import 'package:instagram_clone/widgets/like_animation.dart';
+import 'package:instagram_clone/widgets/photos_display_list.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class PollutionPointScreen extends StatefulWidget {
+class EventScreen extends StatefulWidget {
   Map<String, dynamic> snap;
-  PollutionPointScreen({super.key, required this.snap});
+  EventScreen({super.key, required this.snap});
 
   @override
-  State<PollutionPointScreen> createState() => _PollutionPointScreenState();
+  State<EventScreen> createState() => _EventScreenState();
 }
 
-class _PollutionPointScreenState extends State<PollutionPointScreen> {
+class _EventScreenState extends State<EventScreen> {
   bool isLikeAnimating = false;
   int commentLen = 0;
+  bool? _isSubscribed;
+  late User _user;
+  late Event _event;
+  List<Uint8List> _photos = List.empty(growable: true);
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _getComments();
+  Future<Uint8List> _downloadImageAsBytes(String url) async {
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
+    } else {
+      throw Exception('Failed to load image.');
+    }
+  }
+
+  _photosFromUrls() async {
+    for (var url in widget.snap['photos']) {
+      Uint8List photo = await _downloadImageAsBytes(url);
+      setState(() {
+        _photos.add(photo);
+      });
+    }
   }
 
   void _getComments() async {
     try {
       QuerySnapshot snap = await FirebaseFirestore.instance
-          .collection(FirestoreMethods().POLLUTION_POINTS)
-          .doc(widget.snap['postId'])
+          .collection(FirestoreMethods().EVENTS)
+          .doc(widget.snap['id'])
           .collection(FirestoreMethods().COMMENTS)
           .get();
       setState(() {
@@ -46,10 +67,29 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _photosFromUrls();
+    _getComments();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<UserProvider>(context).getUser;
+    _user = Provider.of<UserProvider>(context).getUser;
+    if (_isSubscribed == null) {
+      setState(() {
+        _isSubscribed = widget.snap['subscribers'].contains(_user.uid);
+      });
+    }
     return Scaffold(
-      appBar: null,
+      appBar: AppBar(
+        backgroundColor: mobileBackgroundColor,
+        title: Text(
+          widget.snap['name'],
+        ),
+        centerTitle: true,
+      ),
       body: Container(
         color: mobileBackgroundColor,
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -74,7 +114,7 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.snap["username"],
+                            widget.snap["organizationsName"],
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.none,
@@ -100,7 +140,7 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
                                   (e) => InkWell(
                                     onTap: () async {
                                       FirestoreMethods().deletePollutionPoint(
-                                          widget.snap['postId']);
+                                          widget.snap['id']);
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                     },
@@ -124,21 +164,18 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
             GestureDetector(
               onDoubleTap: () {
                 setState(() {
-                  FirestoreMethods().likePost(widget.snap['postId'].toString(),
-                      user.uid, widget.snap['likes']);
+                  FirestoreMethods().likePost(widget.snap['id'].toString(),
+                      _user.uid, widget.snap['likes']);
                   isLikeAnimating = true;
                 });
               },
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.35,
-                    width: double.infinity,
-                    child: Image.network(
-                      widget.snap['postUrl'].toString(),
-                      fit: BoxFit.cover,
-                    ),
+                  PhotosListDisplay(
+                    canAddPhotos: false,
+                    photos: _photos,
+                    selectFormGallery: true,
                   ),
                   AnimatedOpacity(
                     duration: const Duration(milliseconds: 200),
@@ -166,10 +203,10 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
             Row(
               children: [
                 LikeAnimation(
-                  isAnimating: widget.snap['likes'].contains(user.uid),
+                  isAnimating: widget.snap['likes'].contains(_user.uid),
                   smallLike: true,
                   child: IconButton(
-                    icon: widget.snap['likes'].contains(user.uid)
+                    icon: widget.snap['likes'].contains(_user.uid)
                         ? const Icon(
                             Icons.favorite,
                             color: Colors.green,
@@ -178,8 +215,8 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
                             Icons.favorite_border,
                           ),
                     onPressed: () => FirestoreMethods().likePost(
-                      widget.snap['postId'].toString(),
-                      user.uid,
+                      widget.snap['id'].toString(),
+                      _user.uid,
                       widget.snap['likes'],
                     ),
                   ),
@@ -190,8 +227,8 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
                       builder: (context) => CommentsScreen(
                         snap: widget.snap,
                         stream: FirebaseFirestore.instance
-                            .collection(FirestoreMethods().POLLUTION_POINTS)
-                            .doc(widget.snap['postId'])
+                            .collection(FirestoreMethods().EVENTS)
+                            .doc(widget.snap['id'])
                             .collection(FirestoreMethods().COMMENTS)
                             .orderBy(
                               'datePublished',
@@ -199,12 +236,12 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
                             )
                             .snapshots(),
                         onTap: (String text) async {
-                          await FirestoreMethods().postCommentOnPost(
-                            widget.snap['postId'],
+                          await FirestoreMethods().postCommentOnEvent(
+                            widget.snap['id'],
                             text,
-                            user.uid,
-                            user.username,
-                            user.photoUrl,
+                            _user.uid,
+                            _user.username,
+                            _user.photoUrl,
                           );
                         },
                       ),
@@ -218,6 +255,20 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
                   onPressed: () {},
                   icon: const Icon(
                     Icons.send,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => UserOnEventScreen(
+                          usersIds: widget.snap['subscribers'],
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.man,
                   ),
                 ),
                 Expanded(
@@ -262,7 +313,7 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
                         style: const TextStyle(color: primaryColor),
                         children: [
                           TextSpan(
-                            text: widget.snap['username'],
+                            text: widget.snap['organizationsName'],
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -291,15 +342,37 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(
-                      DateFormat.yMMMd()
-                          .format(widget.snap['datePublished'].toDate()),
+                      "start date:${(widget.snap['startDate'].toDate() as DateTime).toString()}",
                       style:
                           const TextStyle(fontSize: 16, color: secondaryColor),
                     ),
-                  )
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Text(
+                      "end date:${(widget.snap['endDate'].toDate() as DateTime).toString()}",
+                      style:
+                          const TextStyle(fontSize: 16, color: secondaryColor),
+                    ),
+                  ),
                 ],
               ),
-            )
+            ),
+            FollowButton(
+              backgroundColor:
+                  _isSubscribed! ? mobileBackgroundColor : Colors.blue,
+              borderColor: primaryColor,
+              function: () async {
+                setState(() {
+                  _isSubscribed = !_isSubscribed!;
+                  print(_isSubscribed);
+                });
+                await FirestoreMethods().subscribeOnAnEvent(
+                    widget.snap['id'], _user.uid, widget.snap['subscribers']);
+              },
+              text: _isSubscribed! ? "Unsubscribed" : "subscribed",
+              textColor: Colors.white,
+            ),
           ],
         ),
       ),

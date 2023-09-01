@@ -39,7 +39,7 @@ class AalocateMapState extends State<AlocateMap> {
   }
 
   _getMarks() async {
-    QuerySnapshot querySnapshot = await _collectionRef.get();
+    QuerySnapshot querySnapshot = await _collectionRef.where('eventId', isEqualTo: "").get();
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     for (var i in allData) {
       var snap = i as Map<String, dynamic>;
@@ -53,7 +53,6 @@ class AalocateMapState extends State<AlocateMap> {
                   () {
                     if (!_highlights.contains(snap['postId'])) {
                       _highlights.add(snap['postId']);
-                      print(snap['postId']);
                     } else {
                       _highlights.remove(snap['postId']);
                     }
@@ -125,8 +124,8 @@ class AalocateMapState extends State<AlocateMap> {
                         ),
                       );
                     },
-                    child: Icon(Icons
-                        .navigate_next_rounded), // Change this to your desired icon
+                    child: const Icon(Icons
+                        .navigate_next_rounded), 
                   ),
                 ),
               )

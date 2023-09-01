@@ -7,6 +7,7 @@ import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/resources/storage_methods.dart';
 import 'package:instagram_clone/responsive/mobile_screen_layout.dart';
+import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/widgets/follow_button.dart';
 import 'package:instagram_clone/widgets/photos_display_list.dart';
 import 'package:provider/provider.dart';
@@ -26,21 +27,33 @@ class CreateEventScreen extends StatefulWidget {
 
 class _CreateEventScreenState extends State<CreateEventScreen> {
   List<Uint8List> _photos = List.empty(growable: true);
-  DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTime = TimeOfDay.now();
-  final TextEditingController _controller = TextEditingController();
+  DateTime _selectedStartDate = DateTime.now();
+  TimeOfDay _selectedStartTime = TimeOfDay.now();
+  DateTime _selectedEndDate = DateTime.now();
+  TimeOfDay _selectedEndTime = TimeOfDay.now();
+  final TextEditingController _description = TextEditingController();
+  final TextEditingController _eventName = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    _description.dispose();
+    _eventName.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
-      appBar: null,
+      appBar: AppBar(
+        backgroundColor: mobileBackgroundColor,
+        title: TextFormField(
+          controller: _eventName,
+          decoration: const InputDecoration(
+            labelText: 'Type event\'s name',
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -59,10 +72,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               initialValue: '',
               firstDate: DateTime.now(),
               lastDate: DateTime(2100),
-              dateLabelText: 'Date',
+              dateLabelText: 'Start date',
               onChanged: (String val) {
                 setState(() {
-                  _selectedDate = DateTime.parse(val);
+                  _selectedStartDate = DateTime.parse(val);
                 });
               },
             ),
@@ -70,11 +83,12 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
+                  Text("start date"),
                   IconButton(
                     onPressed: () async {
                       TimeOfDay? newTime = (await showTimePicker(
                         context: context,
-                        initialTime: _selectedTime,
+                        initialTime: _selectedStartTime,
                         builder: (BuildContext context, Widget? child) {
                           return MediaQuery(
                             data: MediaQuery.of(context)
@@ -86,19 +100,62 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       if (newTime == null) return;
 
                       setState(() {
-                        _selectedTime = newTime;
+                        _selectedStartTime = newTime;
                       });
                     },
                     icon: Icon(Icons.access_time),
                   ),
                   Text(
-                    '${_selectedTime.hour}:${_selectedTime.minute}',
+                    '${_selectedStartTime.hour}:${_selectedStartTime.minute}',
+                  ),
+                ],
+              ),
+            ),
+            DateTimePicker(
+              initialValue: '',
+              firstDate: DateTime.now(),
+              lastDate: DateTime(2100),
+              dateLabelText: 'End date',
+              onChanged: (String val) {
+                setState(() {
+                  _selectedEndDate = DateTime.parse(val);
+                });
+              },
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  Text("end date"),
+                  IconButton(
+                    onPressed: () async {
+                      TimeOfDay? newTime = (await showTimePicker(
+                        context: context,
+                        initialTime: _selectedEndTime,
+                        builder: (BuildContext context, Widget? child) {
+                          return MediaQuery(
+                            data: MediaQuery.of(context)
+                                .copyWith(alwaysUse24HourFormat: true),
+                            child: child!,
+                          );
+                        },
+                      ))!;
+                      if (newTime == null) return;
+
+                      setState(() {
+                        _selectedEndTime = newTime;
+                      });
+                    },
+                    icon: Icon(Icons.access_time),
+                  ),
+                  Text(
+                    '${_selectedEndTime.hour}:${_selectedEndTime.minute}',
                   ),
                 ],
               ),
             ),
             TextField(
-              controller: _controller,
+              controller: _description,
               decoration: InputDecoration(
                 labelText: 'Type a description',
               ),
@@ -108,36 +165,50 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               padding: EdgeInsets.only(
                 top: 30,
               ),
-              child: FollowButton(
-                backgroundColor: Colors.black,
-                borderColor: Colors.white,
-                function: () {
-                  _selectedDate = new DateTime(
-                      _selectedDate.year,
-                      _selectedDate.month,
-                      _selectedDate.day,
-                      _selectedTime.hour,
-                      _selectedTime.minute);
+              child: (_description.text != null && _eventName.text != null)
+                  ? FollowButton(
+                      backgroundColor: Colors.black,
+                      borderColor: Colors.white,
+                      function: () {
+                        _selectedStartDate = new DateTime(
+                          _selectedStartDate.year,
+                          _selectedStartDate.month,
+                          _selectedStartDate.day,
+                          _selectedStartTime.hour,
+                          _selectedStartTime.minute,
+                        );
+                        _selectedEndDate = new DateTime(
+                          _selectedEndDate.year,
+                          _selectedEndDate.month,
+                          _selectedEndDate.day,
+                          _selectedEndTime.hour,
+                          _selectedEndTime.minute,
+                        );
 
-                  FirestoreMethods().uploadEvent(
-                    _selectedDate,
-                    widget.point!.latitude,
-                    widget.point!.longitude,
-                    _controller.text,
-                    user.uid,
-                    _photos,
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MobileScreenLayout(),
-                    ),
-                  );
-                },
-                text: "create a new event",
-                textColor: Colors.white,
-                width: MediaQuery.of(context).size.width * 0.8,
-              ),
+                        FirestoreMethods().uploadEvent(
+                          _eventName.text,
+                          _selectedStartDate,
+                          _selectedEndDate,
+                          widget.point!.latitude,
+                          widget.point!.longitude,
+                          _description.text,
+                          user.uid,
+                          _photos,
+                          user.username,
+                          user.photoUrl,
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MobileScreenLayout(),
+                          ),
+                        );
+                      },
+                      text: "create a new event",
+                      textColor: Colors.white,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                    )
+                  : Container(),
             ),
           ],
         ),

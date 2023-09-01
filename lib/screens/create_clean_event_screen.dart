@@ -6,6 +6,7 @@ import 'package:instagram_clone/models/user.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/responsive/mobile_screen_layout.dart';
+import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/widgets/follow_button.dart';
 import 'package:instagram_clone/widgets/photos_display_list.dart';
 import 'package:latlong2/latlong.dart';
@@ -27,15 +28,16 @@ class CreateEventCleanScreen extends StatefulWidget {
 class _CreateEventCleanScreenState extends State<CreateEventCleanScreen> {
   List<Uint8List> _photos = List.empty(growable: true);
   List<String> _urls = List.empty(growable: true);
-  int _index = 0;
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _description = TextEditingController();
+  final TextEditingController _eventName = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    _description.dispose();
+    _eventName.dispose();
   }
 
   Future<Uint8List> downloadImageAsBytes(String url) async {
@@ -70,7 +72,15 @@ class _CreateEventCleanScreenState extends State<CreateEventCleanScreen> {
   Widget build(BuildContext context) {
     final User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
-      appBar: null,
+      appBar: AppBar(
+        backgroundColor: mobileBackgroundColor,
+        title: TextFormField(
+          controller: _eventName,
+          decoration: const InputDecoration(
+            labelText: 'Type event\'s name',
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -127,7 +137,7 @@ class _CreateEventCleanScreenState extends State<CreateEventCleanScreen> {
               ),
             ),
             TextField(
-              controller: _controller,
+              controller: _description,
               decoration: InputDecoration(
                 labelText: 'Type a description',
               ),
@@ -137,35 +147,41 @@ class _CreateEventCleanScreenState extends State<CreateEventCleanScreen> {
               padding: EdgeInsets.only(
                 top: 30,
               ),
-              child: FollowButton(
-                backgroundColor: Colors.black,
-                borderColor: Colors.white,
-                function: () {
-                  _selectedDate = new DateTime(
-                      _selectedDate.year,
-                      _selectedDate.month,
-                      _selectedDate.day,
-                      _selectedTime.hour,
-                      _selectedTime.minute);
-                  FirestoreMethods().uploadEventClean(
-                      _selectedDate,
-                      widget.point!.latitude,
-                      widget.point!.longitude,
-                      _controller.text,
-                      user.uid,
-                      _urls,
-                      widget.pollutionPointsIds);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MobileScreenLayout(),
-                    ),
-                  );
-                },
-                text: "create a new event",
-                textColor: Colors.white,
-                width: MediaQuery.of(context).size.width * 0.8,
-              ),
+              child: (_eventName.text != null && _description.text != null)
+                  ? FollowButton(
+                      backgroundColor: Colors.black,
+                      borderColor: Colors.white,
+                      function: () {
+                        _selectedDate = new DateTime(
+                            _selectedDate.year,
+                            _selectedDate.month,
+                            _selectedDate.day,
+                            _selectedTime.hour,
+                            _selectedTime.minute);
+                        FirestoreMethods().uploadEventClean(
+                          _eventName.text,
+                          _selectedDate,
+                          widget.point!.latitude,
+                          widget.point!.longitude,
+                          _description.text,
+                          user.uid,
+                          _urls,
+                          widget.pollutionPointsIds,
+                          user.username,
+                          user.photoUrl,
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MobileScreenLayout(),
+                          ),
+                        );
+                      },
+                      text: "create a new event",
+                      textColor: Colors.white,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                    )
+                  : Container(),
             ),
           ],
         ),
