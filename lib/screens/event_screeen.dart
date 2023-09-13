@@ -342,7 +342,7 @@ class _EventScreenState extends State<EventScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(
-                      "start date:${(widget.snap['startDate'].toDate() as DateTime).toString()}",
+                      "start date:${DateFormat('yyyy-MM-dd – kk:mm').format((widget.snap['startDate'] as Timestamp).toDate())}",
                       style:
                           const TextStyle(fontSize: 16, color: secondaryColor),
                     ),
@@ -350,7 +350,7 @@ class _EventScreenState extends State<EventScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(
-                      "end date:${(widget.snap['endDate'].toDate() as DateTime).toString()}",
+                      "end date:${DateFormat('yyyy-MM-dd – kk:mm').format((widget.snap['endDate'] as Timestamp).toDate())}",
                       style:
                           const TextStyle(fontSize: 16, color: secondaryColor),
                     ),

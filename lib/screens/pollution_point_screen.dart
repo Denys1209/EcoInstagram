@@ -49,7 +49,9 @@ class _PollutionPointScreenState extends State<PollutionPointScreen> {
   Widget build(BuildContext context) {
     final User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
-      appBar: null,
+      appBar: AppBar(
+        backgroundColor: mobileBackgroundColor,
+      ),
       body: Container(
         color: mobileBackgroundColor,
         padding: const EdgeInsets.symmetric(vertical: 10),

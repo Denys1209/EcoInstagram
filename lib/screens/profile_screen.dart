@@ -7,6 +7,7 @@ import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/ButtonsRow.dart';
 import 'package:instagram_clone/widgets/follow_button.dart';
+import 'package:instagram_clone/widgets/wall_with_medals.dart';
 import 'package:provider/provider.dart';
 import 'package:instagram_clone/models/user.dart' as model;
 
@@ -79,108 +80,101 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             body: ListView(
               children: [
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              backgroundImage: NetworkImage(
-                                userData['photoUrl'],
-                              ),
-                              radius: 40,
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            backgroundImage: NetworkImage(
+                              userData['photoUrl'],
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      buildStatColumn(howManyPollutionReports,
-                                          "pollution report"),
-                                      buildStatColumn(followers, "followers"),
-                                      buildStatColumn(following, "following"),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      FirebaseAuth.instance.currentUser!.uid ==
-                                              widget.uid
-                                          ? FollowButton(
-                                              text: 'Edit Profile',
-                                              backgroundColor:
-                                                  mobileBackgroundColor,
-                                              textColor: primaryColor,
-                                              borderColor: Colors.grey,
-                                              function: () {},
-                                            )
-                                          : isFollowing
-                                              ? FollowButton(
-                                                  text: 'Unfollow',
-                                                  backgroundColor: Colors.white,
-                                                  textColor: Colors.black,
-                                                  borderColor: Colors.grey,
-                                                  function: () {
-                                                    FirestoreMethods()
-                                                        .subscribeOnUser(
-                                                            user.uid,
-                                                            userData['uid']);
-                                                  },
-                                                )
-                                              : FollowButton(
-                                                  text: 'Follow',
-                                                  backgroundColor: Colors.blue,
-                                                  textColor: Colors.white,
-                                                  borderColor: Colors.blue,
-                                                  function: () {
-                                                    FirestoreMethods()
-                                                        .subscribeOnUser(
-                                                            user.uid,
-                                                            userData['uid']);
-                                                  },
-                                                )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(top: 15),
-                          child: Text(
-                            userData['username'],
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                            radius: 40,
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    buildStatColumn(howManyPollutionReports,
+                                        "pollution report"),
+                                    buildStatColumn(followers, "followers"),
+                                    buildStatColumn(following, "following"),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    FirebaseAuth.instance.currentUser!.uid ==
+                                            widget.uid
+                                        ? FollowButton(
+                                            text: 'Edit Profile',
+                                            backgroundColor:
+                                                mobileBackgroundColor,
+                                            textColor: primaryColor,
+                                            borderColor: Colors.grey,
+                                            function: () {},
+                                          )
+                                        : isFollowing
+                                            ? FollowButton(
+                                                text: 'Unfollow',
+                                                backgroundColor: Colors.white,
+                                                textColor: Colors.black,
+                                                borderColor: Colors.grey,
+                                                function: () {
+                                                  FirestoreMethods()
+                                                      .subscribeOnUser(user.uid,
+                                                          userData['uid']);
+                                                },
+                                              )
+                                            : FollowButton(
+                                                text: 'Follow',
+                                                backgroundColor: Colors.blue,
+                                                textColor: Colors.white,
+                                                borderColor: Colors.blue,
+                                                function: () {
+                                                  FirestoreMethods()
+                                                      .subscribeOnUser(user.uid,
+                                                          userData['uid']);
+                                                },
+                                              )
+                                  ],
+                                )
+                              ],
                             ),
                           ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(top: 1),
-                          child: Text(
-                            userData['bio'],
+                        ],
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.only(top: 15),
+                        child: Text(
+                          userData['username'],
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.only(top: 1),
+                        child: Text(
+                          userData['bio'],
+                        ),
+                      )
+                    ],
                   ),
                 ),
                 const Divider(),
-                ButtonRow(
-                  endColor: Colors.blue,
-                  startColor: Colors.white,
-                  functions: [null, null],
-                  texts: ["1", "2"],
+                WallWithMedals(
+                  user: user,
                 ),
               ],
             ),

@@ -347,7 +347,7 @@ class _CleanEventScreenState extends State<CleanEventScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(
-                      "start date:${DateTime.parse(widget.snap['startDate']) as String}",
+                      "start date:${DateFormat('yyyy-MM-dd – kk:mm').format((widget.snap['startDate'] as Timestamp).toDate())}",
                       style:
                           const TextStyle(fontSize: 16, color: secondaryColor),
                     ),

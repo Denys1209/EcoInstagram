@@ -93,7 +93,6 @@ class _PhotosListDisplayState extends State<PhotosListDisplay> {
       children: [
         Container(
           alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 0.4,
           decoration: widget.photos.isEmpty
               ? BoxDecoration(

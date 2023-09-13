@@ -64,6 +64,8 @@ class AuthMethods {
           followingEvents: [],
           followingCleanEvents: [],
           howManyPollutionPointsWereCreted: 0,
+          howManyCleanEventsWereVisited: 0,
+          howManyEventsWereVisited: 0,
         );
 
         await _firestore.collection('users').doc(cred.user!.uid).set(

@@ -26,7 +26,8 @@ class _ButtonRowState extends State<ButtonRow> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (int index = 0; index < 2; index++)
-          Container(
+          ButtonTheme(
+            padding: EdgeInsets.all(0),
             child: TextButton(
               onPressed: () {
                 setState(() {
