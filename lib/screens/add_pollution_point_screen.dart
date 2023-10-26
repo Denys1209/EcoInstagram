@@ -74,7 +74,7 @@ class _AddScreenPollutionPointState extends State<AddScreenPollutionPoint> {
     final User user = Provider.of<UserProvider>(context).getUser;
     return !_uploading
         ? Scaffold(
-            appBar: null,
+          appBar: null,
             body: SingleChildScrollView(
               child: Column(
                 children: [

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/utils/colors.dart';
-import 'package:instagram_clone/widgets/buttom_with_icom.dart';
+import 'package:instagram_clone/widgets/buttom_with_icon.dart';
 
 void MyShowBottomSheet(BuildContext context) {
   showModalBottomSheet(
@@ -30,20 +30,16 @@ void MyShowBottomSheet(BuildContext context) {
               ),
               ButtonWithIcon2(
                 icon: IconData(0xe752, fontFamily: 'MaterialIcons'),
-                text: "add a poin",
+                text: "craete a pollution report",
               ),
               ButtonWithIcon3(
                 icon: IconData(0xf643, fontFamily: 'MaterialIcons'),
-                text: "add a cleaner event",
+                text: "create a cleaner event",
               ),
               ButtonWithIcon4(
-                  icon: IconData(0xe122, fontFamily: 'MaterialIcons'),
-                  text: "add an event",
-                  ),
-              ButtonWithIcon(
-                  icon: IconData(0xe752, fontFamily: 'MaterialIcons'),
-                  text: "add a poin",
-                  onPressed: null),
+                icon: IconData(0xe122, fontFamily: 'MaterialIcons'),
+                text: "create an event",
+              ),
             ]),
       );
     },

@@ -163,6 +163,7 @@ class FirestoreMethods {
           .collection(CLEAN_EVENTS)
           .doc(id)
           .set(eventClean.toJson());
+      await this.subscribeOnACleanEvent(id, organizationId, []);
       for (var i in points) {
         await _firestore.collection(POLLUTION_POINTS).doc(i).update(
           {
@@ -207,6 +208,7 @@ class FirestoreMethods {
         profImage: profImage,
       );
       await _firestore.collection(EVENTS).doc(id).set(event.toJson());
+      await this.subscribeOnAnEvent(id, organizationId, []);
     } catch (e) {
       print(e.toString());
     }
@@ -270,21 +272,21 @@ class FirestoreMethods {
     }
   }
 
-  Future<void> subscribeOnAnEvent(String id, String userId, List subs) async {
+  Future<void> subscribeOnAnEvent(String eventId, String userId, List subs) async {
     if (subs.contains(userId)) {
-      _firestore.collection(EVENTS).doc(id).update({
+      _firestore.collection(EVENTS).doc(eventId).update({
         'subscribers': FieldValue.arrayRemove([userId]),
       });
       _firestore.collection(USERS).doc(userId).update({
-        'followingEvents': FieldValue.arrayRemove([id]),
+        'followingEvents': FieldValue.arrayRemove([eventId]),
       });
       subs.remove(userId);
     } else {
-      _firestore.collection(EVENTS).doc(id).update({
+      _firestore.collection(EVENTS).doc(eventId).update({
         'subscribers': FieldValue.arrayUnion([userId]),
       });
       _firestore.collection(USERS).doc(userId).update({
-        'followingEvents': FieldValue.arrayUnion([id]),
+        'followingEvents': FieldValue.arrayUnion([eventId]),
       });
 
       subs.add(userId);
@@ -292,21 +294,21 @@ class FirestoreMethods {
   }
 
   Future<void> subscribeOnACleanEvent(
-      String id, String userId, List subs) async {
+      String enventId, String userId, List subs) async {
     if (subs.contains(userId)) {
-      _firestore.collection(CLEAN_EVENTS).doc(id).update({
+      _firestore.collection(CLEAN_EVENTS).doc(enventId).update({
         'subscribers': FieldValue.arrayRemove([userId]),
       });
       _firestore.collection(USERS).doc(userId).update({
-        'followingCleanEvents': FieldValue.arrayRemove([id]),
+        'followingCleanEvents': FieldValue.arrayRemove([enventId]),
       });
       subs.remove(userId);
     } else {
-      _firestore.collection(CLEAN_EVENTS).doc(id).update({
+      _firestore.collection(CLEAN_EVENTS).doc(enventId).update({
         'subscribers': FieldValue.arrayUnion([userId]),
       });
       _firestore.collection(USERS).doc(userId).update({
-        'followingCleanEvents': FieldValue.arrayUnion([id]),
+        'followingCleanEvents': FieldValue.arrayUnion([enventId]),
       });
 
       subs.add(userId);

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
+import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
@@ -73,10 +74,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : Scaffold(
             appBar: AppBar(
               backgroundColor: mobileBackgroundColor,
-              title: Text(
-                userData["username"],
-              ),
+              title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      userData["username"],
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          iconSize: 24,
+                          icon: const Icon(
+                            Icons.logout,
+                          ),
+                          onPressed: () {
+                            AuthMethods().signOut();
+                          },
+                        ),
+                      ],
+                    )
+                  ]),
               centerTitle: false,
+              automaticallyImplyLeading: false,
             ),
             body: ListView(
               children: [

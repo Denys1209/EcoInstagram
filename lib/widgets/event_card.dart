@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/screens/clean_event_screen.dart';
 import 'package:instagram_clone/screens/event_screeen.dart';
 import 'package:intl/intl.dart';
 
@@ -15,15 +16,32 @@ class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context).push(
+      onTap: () => {
+        if (widget.snap["endDate"] != null)
+          {
+            Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => EventScreen(snap: widget.snap),
               ),
-            ),
+            )
+          }
+        else
+          {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CleanEventScreen(snap: widget.snap),
+              ),
+            )
+          }
+      },
       child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white70),
+        ),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.1,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
               backgroundColor: Colors.grey,
@@ -32,20 +50,23 @@ class _EventCardState extends State<EventCard> {
               ),
               radius: 20,
             ),
-            Column(
-              children: [
-                Text(
-                  widget.snap['name'],
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, top: 16.0),
+              child: Column(
+                children: [
+                  Text(
+                    widget.snap['name'],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                Text(
-                  "${DateTime.now().difference((widget.snap['endDate'] as Timestamp).toDate())}, start on ${DateFormat('yyyy-MM-dd – kk:mm').format((widget.snap['endDate'] as Timestamp).toDate()).toString()}",
-                ),
-              ],
+                  Text(
+                    "The start after ${(widget.snap['endDate'] as Timestamp).toDate().difference(DateTime.now()).toString().split(":")[0]} hours, start on ${DateFormat('yyyy-MM-dd – kk:mm').format((widget.snap['startDate'] as Timestamp).toDate()).toString()}",
+                  ),
+                ],
+              ),
             ),
           ],
         ),

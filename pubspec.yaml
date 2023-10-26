@@ -34,6 +34,7 @@ dependencies:
   date_time_picker: ^2.1.0
   firebase_auth: ^4.6.1
   firebase_core: ^2.13.0
+  firebase_messaging: ^14.7.2
   firebase_storage: ^11.2.1
   flutter:
     sdk: flutter
@@ -67,6 +68,7 @@ flutter:
   assets:
     - assets/ic_instagram.svg
     - assets/achievements/recycle-bin.png
+    - assets/achievements/plant.png
     - assets/achievements/leaf.png
     - assets/achievements/o2.png
     - assets/achievements/recycle.png
