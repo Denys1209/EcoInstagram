@@ -273,7 +273,10 @@ class _CleanEventScreenState extends State<CleanEventScreen> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+
+
+                  },
                   icon: const Icon(Icons.map_outlined),
                 ),
                 Expanded(

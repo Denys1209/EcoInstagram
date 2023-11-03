@@ -41,31 +41,39 @@ class _EventCardState extends State<EventCard> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.1,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.grey,
-              backgroundImage: NetworkImage(
-                widget.snap['profImage'],
-              ),
-              radius: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 16.0),
-              child: Column(
-                children: [
-                  Text(
-                    widget.snap['name'],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
+            Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 8.0),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey,
+                    backgroundImage: NetworkImage(
+                      widget.snap['profImage'],
                     ),
+                    radius: 20,
                   ),
-                  Text(
-                    "The start after ${(widget.snap['endDate'] as Timestamp).toDate().difference(DateTime.now()).toString().split(":")[0]} hours, start on ${DateFormat('yyyy-MM-dd – kk:mm').format((widget.snap['startDate'] as Timestamp).toDate()).toString()}",
-                  ),
-                ],
+                )),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0, top: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.snap['name'],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      "${(widget.snap['startDate'] as Timestamp).toDate().difference(DateTime.now()).toString().split(":")[0]}, start on ${DateFormat('yyyy-MM-dd – kk:mm').format((widget.snap['startDate'] as Timestamp).toDate()).toString()}",
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

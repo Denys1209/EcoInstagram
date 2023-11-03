@@ -13,19 +13,7 @@ import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kIsWeb) {
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: 'AIzaSyCS6X2jsmKwzhkgCWFD4tlYSYhRpGwAbkU',
-        appId: '1:362560529876:web:b8e5af5f420c41a9e02241',
-        messagingSenderId: '362560529876',
-        projectId: 'instagram-clone-9354e',
-        storageBucket: 'instagram-clone-9354e.appspot.com',
-      ),
-    );
-  } else {
-    await Firebase.initializeApp();
-  }
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

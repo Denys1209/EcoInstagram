@@ -7,6 +7,7 @@ import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/ButtonsRow.dart';
+import 'package:instagram_clone/widgets/alert_dialog_yes_no.dart';
 import 'package:instagram_clone/widgets/follow_button.dart';
 import 'package:instagram_clone/widgets/wall_with_medals.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  var userData = {};
+  late Map<String, dynamic> userData;
   int howManyPollutionReports = 0;
   int followers = 0;
   int following = 0;
@@ -47,15 +48,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .collection('pollutionPoints')
           .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .get();
-      howManyPollutionReports =
-          userSnap.data()!['howManyPollutionPointsWereCreted'];
-      userData = userSnap.data()!;
-      followers = userSnap.data()!['followers'].length;
-      following = userSnap.data()!['following'].length;
-      isFollowing = userSnap
-          .data()!['followers']
-          .contains(FirebaseAuth.instance.currentUser!.uid);
-      setState(() {});
+      setState(() {
+        howManyPollutionReports =
+            userSnap.data()!['howManyPollutionPointsWereCreted'];
+        userData = userSnap.data()!;
+        followers = userSnap.data()!['followers'].length;
+        following = userSnap.data()!['following'].length;
+        isFollowing = userSnap
+            .data()!['followers']
+            .contains(FirebaseAuth.instance.currentUser!.uid);
+      });
     } catch (e) {
       showSnackBar(e.toString(), context);
     }
@@ -88,7 +90,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Icons.logout,
                           ),
                           onPressed: () {
-                            AuthMethods().signOut();
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlrertDialogYesNo(
+                                  onNoFunction: null,
+                                  onYesFunction: () {
+                                    AuthMethods().signOut();
+                                    Navigator.of(context).pop();
+                                  },
+                                  question:
+                                      "Are you sure, that you want to sign out",
+                                  textOnNo: "No",
+                                  textOnYes: "Yes",
+                                  title: "sign out",
+                                );
+                              },
+                            );
                           },
                         ),
                       ],
@@ -176,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         padding: const EdgeInsets.only(top: 15),
                         child: Text(
                           userData['username'],
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -193,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const Divider(),
                 WallWithMedals(
-                  user: user,
+                  user: userData,
                 ),
               ],
             ),

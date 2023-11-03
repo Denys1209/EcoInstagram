@@ -15,12 +15,11 @@ class EventsDisplayScreeen extends StatefulWidget {
 }
 
 class _EventsDisplayScreeenState extends State<EventsDisplayScreeen> {
+  late model.User user;
   late List<EventCard> events = new List.empty(growable: true);
   late List<EventCard> cleanEvents = new List.empty(growable: true);
   List<String> _eventsTypes = List<String>.from(["Clean events", "Events"]);
   String _chooseType = "Clean events";
-
-  void _getEventCards(String name, model.User user) {}
 
   @override
   void initState() {
@@ -29,7 +28,19 @@ class _EventsDisplayScreeenState extends State<EventsDisplayScreeen> {
 
   @override
   Widget build(BuildContext context) {
-    final model.User user = Provider.of<UserProvider>(context).getUser;
+    setState(() {
+      user = Provider.of<UserProvider>(context).getUser;
+    });
+    var futureEvents = FirebaseFirestore.instance
+        .collection('events')
+        .where(FieldPath.documentId, whereIn: user.followingEvents)
+        .get()
+        .asStream();
+    var futureCleanEvents = FirebaseFirestore.instance
+        .collection('cleanEvents')
+        .where(FieldPath.documentId, whereIn: user.followingCleanEvents)
+        .get()
+        .asStream();
     return Scaffold(
         appBar: AppBar(
           title: DropdownButton<String>(
@@ -63,51 +74,45 @@ class _EventsDisplayScreeenState extends State<EventsDisplayScreeen> {
         ),
         body: _chooseType == "Events"
             ? (!user.followingEvents.isEmpty
-                ? FutureBuilder(
-                    future: FirebaseFirestore.instance
-                        .collection('events')
-                        .where(FieldPath.documentId,
-                            whereIn: user.followingEvents)
-                        .get(),
+                ? StreamBuilder(
+                    stream: futureEvents,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
-                      return ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) => EventCard(
-                          snap: snapshot.data!.docs[index].data(),
-                        ),
+                      return ListView(
+                        children: snapshot.data!.docs.map((DocumentSnapshot document)
+                        {
+                          return new EventCard(snap: document.data() as Map<String, dynamic>);
+                        },
+                        ).toList()
                       );
                     },
                   )
-                : Center(
+                : const Center(
                     child: Text("No events to display"),
                   ))
             : (!user.followingCleanEvents.isEmpty
-                ? FutureBuilder(
-                    future: FirebaseFirestore.instance
-                        .collection('cleanEvents')
-                        .where(FieldPath.documentId,
-                            whereIn: user.followingCleanEvents)
-                        .get(),
-                    builder: (context, snapshot) {
+                ? StreamBuilder(
+                    stream: futureCleanEvents,
+                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
-                      return ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) => EventCard(
-                          snap: snapshot.data!.docs[index].data(),
-                        ),
+                      return ListView(
+                        children: snapshot.data!.docs.map((DocumentSnapshot document)
+                        {
+                          return new EventCard(snap: document.data() as Map<String, dynamic>);
+                        },
+                        ).toList()
                       );
                     },
                   )
-                : Center(
+                : const Center(
                     child: Text("No events to display"),
                   )));
   }

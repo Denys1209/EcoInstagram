@@ -83,7 +83,6 @@ class _EventScreenState extends State<EventScreen> {
       });
     }
     return Scaffold(
-      
       appBar: AppBar(
         backgroundColor: mobileBackgroundColor,
         title: Text(

@@ -109,9 +109,22 @@ class FirestoreMethods {
     }
   }
 
-  Future<void> deletePollutionPoint(String postId) async {
+  Future<void> deletePollutionPoint(String pointId) async {
     try {
-      await _firestore.collection(POLLUTION_POINTS).doc(postId).delete();
+      final collection = FirebaseFirestore.instance.collection(CLEAN_EVENTS);
+      final snapshot = await collection.get();
+      final docs = snapshot.docs;
+      for (var doc in docs) {
+        final data = doc.data();
+        final array = data[POINTS];
+
+        if (array.contains(pointId)) {
+          await doc.reference.update({
+            POINTS: FieldValue.arrayRemove([pointId])
+          });
+        }
+      }
+      await _firestore.collection(POLLUTION_POINTS).doc(pointId).delete();
     } catch (err) {
       print(err.toString());
     }
@@ -272,7 +285,8 @@ class FirestoreMethods {
     }
   }
 
-  Future<void> subscribeOnAnEvent(String eventId, String userId, List subs) async {
+  Future<void> subscribeOnAnEvent(
+      String eventId, String userId, List subs) async {
     if (subs.contains(userId)) {
       _firestore.collection(EVENTS).doc(eventId).update({
         'subscribers': FieldValue.arrayRemove([userId]),

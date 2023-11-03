@@ -3,7 +3,7 @@ import 'package:instagram_clone/models/user.dart' as model;
 import 'package:instagram_clone/classes/Medal.dart';
 
 class MedalWidget extends StatelessWidget {
-  final model.User user;
+  final Map<String, dynamic> user;
   final Medal theMedal;
   MedalWidget({super.key, required this.user, required this.theMedal});
 

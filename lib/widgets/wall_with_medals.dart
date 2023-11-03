@@ -4,7 +4,7 @@ import 'package:instagram_clone/models/user.dart' as model;
 import 'package:instagram_clone/widgets/medal.dart';
 
 class WallWithMedals extends StatefulWidget {
-  final model.User user;
+  final Map<String, dynamic> user;
   const WallWithMedals({super.key, required this.user});
 
   @override
