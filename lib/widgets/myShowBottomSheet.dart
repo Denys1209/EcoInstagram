@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/screens/add_pollution_point_screen.dart';
+import 'package:instagram_clone/screens/create_post_screen.dart';
+import 'package:instagram_clone/screens/map_get_point.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/widgets/buttom_with_icon.dart';
 
-void MyShowBottomSheet(BuildContext context) {
+void myShowBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
     enableDrag: true,
@@ -12,12 +15,12 @@ void MyShowBottomSheet(BuildContext context) {
     )),
     backgroundColor: secondaryColor,
     builder: (BuildContext context) {
-      return const SizedBox(
+      return SizedBox(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 60,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -28,18 +31,36 @@ void MyShowBottomSheet(BuildContext context) {
                   ],
                 ),
               ),
-              ButtonWithIcon2(
-                icon: IconData(0xe752, fontFamily: 'MaterialIcons'),
-                text: "craete a pollution report",
-              ),
-              ButtonWithIcon3(
-                icon: IconData(0xf643, fontFamily: 'MaterialIcons'),
-                text: "create a cleaner event",
-              ),
-              ButtonWithIcon4(
-                icon: IconData(0xe122, fontFamily: 'MaterialIcons'),
-                text: "create an event",
-              ),
+              ButtonWithIcon(
+                  icon: const IconData(0xe752, fontFamily: 'MaterialIcons'),
+                  text: "craete a pollution report",
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const AddScreenPollutionPoint()));
+                  }),
+              ButtonWithIcon(
+                  icon: const IconData(0xf643, fontFamily: 'MaterialIcons'),
+                  text: "create a clean event",
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const ScreenGetPointOnMap()));
+                  }),
+              ButtonWithIcon(
+                  icon: const IconData(0xe122, fontFamily: 'MaterialIcons'),
+                  text: "create an event",
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const ScreenGetPointOnMap(
+                              goToAlocateScreen: false,
+                            )));
+                  }),
+              ButtonWithIcon(
+                  icon: const IconData(0xe752, fontFamily: 'MaterialIcons'),
+                  text: "craete a post",
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const CreatePostScreen()));
+                  }),
             ]),
       );
     },

@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -22,15 +21,15 @@ class AalocateMapState extends State<AlocateMap> {
   final CollectionReference _collectionRef =
       FirebaseFirestore.instance.collection('pollutionPoints');
 
-  List<Marker> _marks = List.empty(growable: true);
-  List<String> _highlights = List.empty(growable: true);
-  bool _loadEnd = false;
+  final List<Marker> _marks = List.empty(growable: true);
+  final List<String> _highlights = List.empty(growable: true);
+  final bool _loadEnd = false;
 
   Widget _buildFlagMarker(BuildContext context) {
-    return Container(
+    return const SizedBox(
       width: 30,
       height: 50,
-      child: const Icon(
+      child: Icon(
         Icons.flag,
         color: Colors.blue,
         size: 40,
@@ -88,7 +87,7 @@ class AalocateMapState extends State<AlocateMap> {
           children: [
             TileLayer(
               urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-              subdomains: ['a', 'b', 'c'],
+              subdomains: const ['a', 'b', 'c'],
             ),
             MarkerLayer(
               markers: [
@@ -105,7 +104,7 @@ class AalocateMapState extends State<AlocateMap> {
             ),
           ],
         ),
-        _highlights.length != 0
+        _highlights.isNotEmpty
             ? Positioned(
                 bottom: 0,
                 left: 0,

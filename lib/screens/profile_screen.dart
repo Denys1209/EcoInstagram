@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
+import 'package:instagram_clone/screens/events_display_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
-import 'package:instagram_clone/widgets/ButtonsRow.dart';
 import 'package:instagram_clone/widgets/alert_dialog_yes_no.dart';
-import 'package:instagram_clone/widgets/follow_button.dart';
+import 'package:instagram_clone/widgets/shape_button.dart';
 import 'package:instagram_clone/widgets/wall_with_medals.dart';
 import 'package:provider/provider.dart';
 import 'package:instagram_clone/models/user.dart' as model;
@@ -24,8 +24,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late Map<String, dynamic> userData;
   int howManyPollutionReports = 0;
-  int followers = 0;
-  int following = 0;
+  int followingCleanEvents = 0;
+  int followingEvents = 0;
   bool isFollowing = false;
   bool isLoading = false;
 
@@ -52,8 +52,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         howManyPollutionReports =
             userSnap.data()!['howManyPollutionPointsWereCreted'];
         userData = userSnap.data()!;
-        followers = userSnap.data()!['followers'].length;
-        following = userSnap.data()!['following'].length;
+        followingCleanEvents = userSnap.data()!['followingCleanEvents'].length;
+        followingEvents = userSnap.data()!['followingEvents'].length;
         isFollowing = userSnap
             .data()!['followers']
             .contains(FirebaseAuth.instance.currentUser!.uid);
@@ -140,9 +140,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     buildStatColumn(howManyPollutionReports,
-                                        "pollution report"),
-                                    buildStatColumn(followers, "followers"),
-                                    buildStatColumn(following, "following"),
+                                        "reports", null),
+                                    buildStatColumn(
+                                        followingCleanEvents,
+                                        "events",
+                                        () => {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EventsDisplayScreeen(
+                                                          userData: userData,
+                                                        )),
+                                              )
+                                            }),
+                                    buildStatColumn(
+                                        followingEvents,
+                                        "clean events",
+                                        () => {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EventsDisplayScreeen(
+                                                          userData: userData,
+                                                        )),
+                                              )
+                                            }),
                                   ],
                                 ),
                                 Row(
@@ -151,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   children: [
                                     FirebaseAuth.instance.currentUser!.uid ==
                                             widget.uid
-                                        ? FollowButton(
+                                        ? ShapeButton(
                                             text: 'Edit Profile',
                                             backgroundColor:
                                                 mobileBackgroundColor,
@@ -160,7 +182,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             function: () {},
                                           )
                                         : isFollowing
-                                            ? FollowButton(
+                                            ? ShapeButton(
                                                 text: 'Unfollow',
                                                 backgroundColor: Colors.white,
                                                 textColor: Colors.black,
@@ -171,7 +193,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                           userData['uid']);
                                                 },
                                               )
-                                            : FollowButton(
+                                            : ShapeButton(
                                                 text: 'Follow',
                                                 backgroundColor: Colors.blue,
                                                 textColor: Colors.white,
@@ -218,30 +240,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
   }
 
-  Column buildStatColumn(int num, String lable) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          num.toString(),
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 4),
-          child: Text(
-            lable,
+  InkWell buildStatColumn(int num, String label, Function()? onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            num.toString(),
             style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: Colors.grey,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ),
-      ],
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

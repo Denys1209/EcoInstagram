@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:instagram_clone/screens/clean_event_screen.dart';
 
 class CleanEventMark extends StatefulWidget {
@@ -22,7 +21,7 @@ class _CleanEventMarkState extends State<CleanEventMark> {
                 builder: (context) => CleanEventScreen(snap: widget.snap),
               ),
             ),
-        child: Icon(
+        child: const Icon(
           Icons.location_on,
           color: Colors.blue,
           size: 30,

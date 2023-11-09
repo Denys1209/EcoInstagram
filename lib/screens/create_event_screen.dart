@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/models/user.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
-import 'package:instagram_clone/resources/storage_methods.dart';
 import 'package:instagram_clone/responsive/mobile_screen_layout.dart';
 import 'package:instagram_clone/utils/colors.dart';
-import 'package:instagram_clone/widgets/follow_button.dart';
+import 'package:instagram_clone/widgets/shape_button.dart';
 import 'package:instagram_clone/widgets/photos_display_list.dart';
 import 'package:provider/provider.dart';
 import 'package:latlong2/latlong.dart';
@@ -26,7 +25,7 @@ class CreateEventScreen extends StatefulWidget {
 }
 
 class _CreateEventScreenState extends State<CreateEventScreen> {
-  List<Uint8List> _photos = List.empty(growable: true);
+  final List<Uint8List> _photos = List.empty(growable: true);
   DateTime _selectedStartDate = DateTime.now();
   TimeOfDay _selectedStartTime = TimeOfDay.now();
   DateTime _selectedEndDate = DateTime.now();
@@ -83,7 +82,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
-                  Text("start date"),
+                  const Text("start date"),
                   IconButton(
                     onPressed: () async {
                       TimeOfDay? newTime = (await showTimePicker(
@@ -103,7 +102,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                         _selectedStartTime = newTime;
                       });
                     },
-                    icon: Icon(Icons.access_time),
+                    icon: const Icon(Icons.access_time),
                   ),
                   Text(
                     '${_selectedStartTime.hour}:${_selectedStartTime.minute}',
@@ -126,7 +125,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
-                  Text("end date"),
+                  const Text("end date"),
                   IconButton(
                     onPressed: () async {
                       TimeOfDay? newTime = (await showTimePicker(
@@ -146,7 +145,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                         _selectedEndTime = newTime;
                       });
                     },
-                    icon: Icon(Icons.access_time),
+                    icon: const Icon(Icons.access_time),
                   ),
                   Text(
                     '${_selectedEndTime.hour}:${_selectedEndTime.minute}',
@@ -156,28 +155,28 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             ),
             TextField(
               controller: _description,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Type a description',
               ),
               maxLines: 3,
             ),
             Padding(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 top: 30,
               ),
-              child: (_description.text != null && _eventName.text != null)
-                  ? FollowButton(
+              child: (_eventName.text != null)
+                  ? ShapeButton(
                       backgroundColor: Colors.black,
-                      borderColor: Colors.white,
+                      borderColor: Colors.blue,
                       function: () {
-                        _selectedStartDate = new DateTime(
+                        _selectedStartDate = DateTime(
                           _selectedStartDate.year,
                           _selectedStartDate.month,
                           _selectedStartDate.day,
                           _selectedStartTime.hour,
                           _selectedStartTime.minute,
                         );
-                        _selectedEndDate = new DateTime(
+                        _selectedEndDate = DateTime(
                           _selectedEndDate.year,
                           _selectedEndDate.month,
                           _selectedEndDate.day,
@@ -200,7 +199,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MobileScreenLayout(),
+                            builder: (context) => const MobileScreenLayout(),
                           ),
                         );
                       },

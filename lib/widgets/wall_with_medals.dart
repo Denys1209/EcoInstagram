@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/classes/Medal.dart';
-import 'package:instagram_clone/models/user.dart' as model;
 import 'package:instagram_clone/widgets/medal.dart';
 
 class WallWithMedals extends StatefulWidget {
@@ -18,19 +17,19 @@ class _WallWithMedalsState extends State<WallWithMedals> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _achievements = new List.empty(growable: true);
+    _achievements = List.empty(growable: true);
     _achievements.addAll([
-      new Medal(
+      Medal(
           type: MedalTypes.PollutionPointType,
           name: "leaf",
           greaterThan: 10,
           image: "./assets/achievements/leaf.png"),
-      new Medal(
+      Medal(
           type: MedalTypes.PollutionPointType,
           name: "plant",
           greaterThan: 50,
           image: "./assets/achievements/plant.png"),
-      new Medal(
+      Medal(
           type: MedalTypes.PollutionPointType,
           name: "save nature",
           greaterThan: 100,
@@ -40,7 +39,7 @@ class _WallWithMedalsState extends State<WallWithMedals> {
 
   @override
   Widget build(BuildContext context) {
-    Medal sample = new Medal(
+    Medal sample = Medal(
         type: MedalTypes.PollutionPointType,
         name: "test",
         greaterThan: 10,
@@ -49,7 +48,7 @@ class _WallWithMedalsState extends State<WallWithMedals> {
       child: GridView.count(
         shrinkWrap: true,
         physics:
-            ScrollPhysics(), // Enable scrolling within the SingleChildScrollView
+            const ScrollPhysics(), // Enable scrolling within the SingleChildScrollView
         crossAxisCount: 3,
         children: List.generate(
           _achievements.length,

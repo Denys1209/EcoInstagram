@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/screens/profile_screen.dart';
-import 'package:instagram_clone/utils/colors.dart';
 
 class UserOnEventScreen extends StatefulWidget {
   final List usersIds;

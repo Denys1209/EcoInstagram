@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class HighlightMark extends StatefulWidget {
   final Function()? onChanged;
 
-  HighlightMark({super.key, required this.onChanged});
+  const HighlightMark({super.key, required this.onChanged});
 
   @override
   State<HighlightMark> createState() => _HighlightMarkState();
@@ -13,7 +13,7 @@ class _HighlightMarkState extends State<HighlightMark> {
   Color _isHighlight = Colors.green;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 30,
       height: 50,
       child: GestureDetector(

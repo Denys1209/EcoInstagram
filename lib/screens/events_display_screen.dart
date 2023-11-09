@@ -1,48 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/widgets/event_card.dart';
-import 'package:provider/provider.dart';
-import 'package:instagram_clone/models/user.dart' as model;
 
 class EventsDisplayScreeen extends StatefulWidget {
-  const EventsDisplayScreeen({super.key});
+  Map<String, dynamic> userData;
+  EventsDisplayScreeen({super.key, required this.userData});
 
   @override
   State<EventsDisplayScreeen> createState() => _EventsDisplayScreeenState();
 }
 
 class _EventsDisplayScreeenState extends State<EventsDisplayScreeen> {
-  late model.User user;
-  late List<EventCard> events = new List.empty(growable: true);
-  late List<EventCard> cleanEvents = new List.empty(growable: true);
-  List<String> _eventsTypes = List<String>.from(["Clean events", "Events"]);
+  late List<EventCard> events = List.empty(growable: true);
+  late List<EventCard> cleanEvents = List.empty(growable: true);
+  late Stream<QuerySnapshot<Map<String, dynamic>>> futureEvents;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> futureCleanEvents;
+  final List<String> _eventsTypes = List<String>.from(["Clean events", "Events"]);
   String _chooseType = "Clean events";
 
   @override
   void initState() {
     super.initState();
+    if ((widget.userData['followingEvents'] as List).isNotEmpty) {
+      futureEvents = FirebaseFirestore.instance
+          .collection('events')
+          .where(FieldPath.documentId,
+              whereIn: widget.userData['followingEvents'])
+          .get()
+          .asStream();
+    }
+    if ((widget.userData['followingCleanEvents'] as List).isNotEmpty) {
+      futureCleanEvents = FirebaseFirestore.instance
+          .collection('cleanEvents')
+          .where(FieldPath.documentId,
+              whereIn: widget.userData['followingCleanEvents'])
+          .get()
+          .asStream();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      user = Provider.of<UserProvider>(context).getUser;
-    });
-    var futureEvents = FirebaseFirestore.instance
-        .collection('events')
-        .where(FieldPath.documentId, whereIn: user.followingEvents)
-        .get()
-        .asStream();
-    var futureCleanEvents = FirebaseFirestore.instance
-        .collection('cleanEvents')
-        .where(FieldPath.documentId, whereIn: user.followingCleanEvents)
-        .get()
-        .asStream();
     return Scaffold(
         appBar: AppBar(
+
           title: DropdownButton<String>(
             value: _chooseType,
             icon: const Icon(
@@ -65,55 +67,57 @@ class _EventsDisplayScreeenState extends State<EventsDisplayScreeen> {
                 value: value,
                 child: Text(
                   value,
-                  style: TextStyle(color: blueColor),
+                  style: const TextStyle(color: blueColor),
                 ),
               );
             }).toList(),
           ),
           automaticallyImplyLeading: false,
         ),
-        body: _chooseType == "Events"
-            ? (!user.followingEvents.isEmpty
-                ? StreamBuilder(
-                    stream: futureEvents,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return ListView(
-                        children: snapshot.data!.docs.map((DocumentSnapshot document)
-                        {
-                          return new EventCard(snap: document.data() as Map<String, dynamic>);
-                        },
-                        ).toList()
-                      );
-                    },
-                  )
-                : const Center(
-                    child: Text("No events to display"),
-                  ))
-            : (!user.followingCleanEvents.isEmpty
-                ? StreamBuilder(
-                    stream: futureCleanEvents,
-                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return ListView(
-                        children: snapshot.data!.docs.map((DocumentSnapshot document)
-                        {
-                          return new EventCard(snap: document.data() as Map<String, dynamic>);
-                        },
-                        ).toList()
-                      );
-                    },
-                  )
-                : const Center(
-                    child: Text("No events to display"),
-                  )));
+        body: SingleChildScrollView(
+          child: _chooseType == "Events"
+              ? ((widget.userData['followingEvents'] as List).isNotEmpty
+                  ? StreamBuilder(
+                      stream: futureEvents,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return ListView(
+                            children: snapshot.data!.docs.map(
+                          (DocumentSnapshot document) {
+                            return EventCard(
+                                snap: document.data() as Map<String, dynamic>);
+                          },
+                        ).toList());
+                      },
+                    )
+                  : const Center(
+                      child: Text("No events to display"),
+                    ))
+              : ((widget.userData['followingCleanEvents'] as List).isNotEmpty
+                  ? StreamBuilder(
+                      stream: futureCleanEvents,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return ListView(
+                            children: snapshot.data!.docs.map(
+                          (DocumentSnapshot document) {
+                            return EventCard(
+                                snap: document.data() as Map<String, dynamic>);
+                          },
+                        ).toList());
+                      },
+                    )
+                  : const Center(
+                      child: Text("No events to display"),
+                    )),
+        ));
   }
 }

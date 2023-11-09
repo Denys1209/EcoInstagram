@@ -18,7 +18,7 @@ class _EventMarkState extends State<EventMark> {
                 builder: (context) => EventScreen(snap: widget.snap),
               ),
             ),
-        child: Icon(
+        child: const Icon(
           Icons.location_on,
           color: Colors.blue,
           size: 30,

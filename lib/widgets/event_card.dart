@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 class EventCard extends StatefulWidget {
   final Map<String, dynamic> snap;
-  EventCard({super.key, required this.snap});
+  const EventCard({super.key, required this.snap});
 
   @override
   State<EventCard> createState() => _EventCardState();
@@ -36,16 +36,17 @@ class _EventCardState extends State<EventCard> {
       },
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.white70),
+          border: Border.all(color: Colors.white70, width: 0.1),
         ),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.1,
+        padding: const EdgeInsets.all(10),
         child: Row(
           children: [
             Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8.0),
                   child: CircleAvatar(
                     backgroundColor: Colors.grey,
                     backgroundImage: NetworkImage(
@@ -64,7 +65,7 @@ class _EventCardState extends State<EventCard> {
                     Text(
                       widget.snap['name'],
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         color: Colors.white,
                       ),

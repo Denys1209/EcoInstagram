@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:instagram_clone/models/pollution_point.dart';
 import 'package:instagram_clone/widgets/pollution_point_mark.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapScreenForCleanEvent extends StatefulWidget {
-  late List<String> polltuionPointsIds = List.empty(growable: true);
+  late List<dynamic> polltuionPointsIds = List.empty(growable: true);
   MapScreenForCleanEvent({super.key, required this.polltuionPointsIds});
 
   @override
@@ -15,28 +14,28 @@ class MapScreenForCleanEvent extends StatefulWidget {
 
 class _MapScreenForCleanEventState extends State<MapScreenForCleanEvent> {
   List<Marker> _pollutionPoints = List.empty(growable: true);
+  late LatLng _center;
   bool _isLoading = true;
   _getMarks() async {
-    final CollectionReference _collectionRef =
+    final CollectionReference collectionRef =
         FirebaseFirestore.instance.collection('pollutionPoints');
-    QuerySnapshot querySnapshot = await _collectionRef
+    QuerySnapshot querySnapshot = await collectionRef
         .where(FieldPath.documentId, whereIn: widget.polltuionPointsIds)
         .get();
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     List<Marker> marks = List.empty(growable: true);
     for (var i in allData) {
       var snap = i as Map<String, dynamic>;
-      setState(() {
-        marks.add(
-          Marker(
-              point: LatLng(snap["LAT"] as double, snap["LNG"] as double),
-              builder: (context) {
-                return PollutionPointMark(snap: snap);
-              },
-              width: 30,
-              height: 30),
-        );
-      });
+      _center = LatLng(snap["LAT"] as double, snap["LNG"] as double);
+      marks.add(
+        Marker(
+            point: LatLng(snap["LAT"] as double, snap["LNG"] as double),
+            builder: (context) {
+              return PollutionPointMark(snap: snap);
+            },
+            width: 30,
+            height: 30),
+      );
     }
     setState(() {
       _pollutionPoints = marks;
@@ -53,14 +52,14 @@ class _MapScreenForCleanEventState extends State<MapScreenForCleanEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
+    return !_isLoading
         ? Scaffold(
             body: Stack(
               children: [
                 FlutterMap(
                   options: MapOptions(
-                    center: LatLng(37, -122),
-                    zoom: 13,
+                    center: _center,
+                    zoom: 9,
                     maxZoom: 22,
                     interactiveFlags:
                         InteractiveFlag.pinchZoom | InteractiveFlag.drag,

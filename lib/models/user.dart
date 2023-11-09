@@ -13,6 +13,7 @@ class User {
   final int howManyPollutionPointsWereCreted;
   final int howManyCleanEventsWereVisited;
   final int howManyEventsWereVisited;
+  final bool isOrganization;
 
   const User({
     required this.email,
@@ -27,6 +28,7 @@ class User {
     required this.howManyPollutionPointsWereCreted,
     required this.howManyCleanEventsWereVisited,
     required this.howManyEventsWereVisited,
+    required this.isOrganization,
   });
 
   Map<String, dynamic> toJson() => {
@@ -42,6 +44,7 @@ class User {
         "howManyPollutionPointsWereCreted": howManyPollutionPointsWereCreted,
         "howManyCleanEventsWereVisited": howManyCleanEventsWereVisited,
         "howManyEventsWereVisited": howManyEventsWereVisited,
+        "isOrganization": isOrganization,
       };
 
   static User fromSnap(DocumentSnapshot snap) {
@@ -61,6 +64,7 @@ class User {
           snapshot['howManyPollutionPointsWereCreted'],
       howManyCleanEventsWereVisited: snapshot["howManyCleanEventsWereVisited"],
       howManyEventsWereVisited: snapshot["howManyEventsWereVisited"],
+      isOrganization: snapshot["isOrganization"],
     );
   }
 }

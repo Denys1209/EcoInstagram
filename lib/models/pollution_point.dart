@@ -11,21 +11,21 @@ class PollutionPoint {
   final String profImage;
   final double LAT;
   final double LNG;
-  final likes;
+  final List likes;
 
-  PollutionPoint(
-      {required this.description,
-      required this.uid,
-      required this.username,
-      required this.postId,
-      required this.datePublished,
-      required this.postUrl,
-      required this.profImage,
-      required this.likes,
-      required this.LAT,
-      required this.LNG,
-      required this.eventId,
-      });
+  PollutionPoint({
+    required this.description,
+    required this.uid,
+    required this.username,
+    required this.postId,
+    required this.datePublished,
+    required this.postUrl,
+    required this.profImage,
+    required this.likes,
+    required this.LAT,
+    required this.LNG,
+    required this.eventId,
+  });
 
   Map<String, dynamic> toJson() => {
         "description": description,

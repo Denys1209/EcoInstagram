@@ -1,4 +1,3 @@
-import 'package:instagram_clone/models/user.dart' as model;
 
 enum MedalTypes {
   EventType,
@@ -23,28 +22,31 @@ class Medal {
     double progress = 0.0;
     double onePiece = greaterThan / 100;
 
-    switch (this.type) {
+    switch (type) {
       case MedalTypes.EventType:
-        if (user["howManyEventsWereVisited"] / onePiece >= 100)
+        if (user["howManyEventsWereVisited"] / onePiece >= 100) {
           progress = 1.0;
-        else
+        } else {
           progress = user["howManyEventsWereVisited"] / onePiece / 100;
+        }
         break;
       case MedalTypes.CleanEventType:
-        if (user["howManyCleanEventsWereVisited"] / onePiece >= 100)
+        if (user["howManyCleanEventsWereVisited"] / onePiece >= 100) {
           progress = 1.0;
-        else
+        } else {
           progress =
               user["howManyCleanEventsWereVisited"] / onePiece / 100;
+        }
         break;
       case MedalTypes.PollutionPointType:
         if (user["howManyPollutionPointsWereCreted"] / onePiece >=
-            100)
+            100) {
           progress = 1.0;
-        else
+        } else {
           progress = user["howManyPollutionPointsWereCreted"] /
               onePiece /
               100;
+        }
         break;
     }
     return progress;

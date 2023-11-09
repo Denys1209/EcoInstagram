@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:instagram_clone/models/pollution_point.dart';
 import 'package:instagram_clone/models/event.dart';
@@ -17,6 +16,7 @@ class FirestoreMethods {
   final String CLEAN_EVENTS = 'cleanEvents';
   final String EVENTS = 'events';
   final String USERS = 'users';
+  final String POSTS = 'posts';
 
   Future<String> uploadPoint(
     String description,
@@ -111,19 +111,6 @@ class FirestoreMethods {
 
   Future<void> deletePollutionPoint(String pointId) async {
     try {
-      final collection = FirebaseFirestore.instance.collection(CLEAN_EVENTS);
-      final snapshot = await collection.get();
-      final docs = snapshot.docs;
-      for (var doc in docs) {
-        final data = doc.data();
-        final array = data[POINTS];
-
-        if (array.contains(pointId)) {
-          await doc.reference.update({
-            POINTS: FieldValue.arrayRemove([pointId])
-          });
-        }
-      }
       await _firestore.collection(POLLUTION_POINTS).doc(pointId).delete();
     } catch (err) {
       print(err.toString());
@@ -135,7 +122,7 @@ class FirestoreMethods {
     List<String> res = List.empty(growable: true);
     for (String id in listOfIds) {
       final DocumentReference document =
-          await _firestore.collection(POLLUTION_POINTS).doc(id);
+          _firestore.collection(POLLUTION_POINTS).doc(id);
       final DocumentSnapshot snapshot = await document.get();
       final Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
       res.add(data['postUrl']);
@@ -157,7 +144,7 @@ class FirestoreMethods {
   ) async {
     try {
       String id = const Uuid().v1();
-      EventClean eventClean = new EventClean(
+      EventClean eventClean = EventClean(
         name: name,
         startDate: date,
         LAT: LAT,
@@ -176,7 +163,7 @@ class FirestoreMethods {
           .collection(CLEAN_EVENTS)
           .doc(id)
           .set(eventClean.toJson());
-      await this.subscribeOnACleanEvent(id, organizationId, []);
+      await subscribeOnACleanEvent(id, organizationId, []);
       for (var i in points) {
         await _firestore.collection(POLLUTION_POINTS).doc(i).update(
           {
@@ -221,7 +208,7 @@ class FirestoreMethods {
         profImage: profImage,
       );
       await _firestore.collection(EVENTS).doc(id).set(event.toJson());
-      await this.subscribeOnAnEvent(id, organizationId, []);
+      await subscribeOnAnEvent(id, organizationId, []);
     } catch (e) {
       print(e.toString());
     }
@@ -349,6 +336,26 @@ class FirestoreMethods {
       _firestore.collection(USERS).doc(userFrom.uid).update({
         'following': FieldValue.arrayUnion([userOn.uid]),
       });
+    }
+  }
+
+  Future<void> uploadPost(String userName, String message, String userId,
+      String profImage) async {
+    try {
+      String postId = const Uuid().v1();
+      await _firestore.collection(POSTS).add({
+        "userName": userName,
+        "postDate": DateTime.now(),
+        "description": message,
+        "userId": userId,
+        "id": postId,
+        "likes": [],
+        "profImage": profImage,
+      });
+    } catch (e) {
+      print(
+        e.toString(),
+      );
     }
   }
 }

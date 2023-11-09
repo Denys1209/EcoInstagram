@@ -21,7 +21,7 @@ class AlrertDialogYesNo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget yesButton = TextButton(
-      child: Text(this.textOnYes),
+      child: Text(textOnYes),
       onPressed: () {
         if (onYesFunction != null) onYesFunction!();
         Navigator.of(context).pop();
@@ -29,7 +29,7 @@ class AlrertDialogYesNo extends StatelessWidget {
     );
 
     Widget noButton = TextButton(
-      child: Text(this.textOnNo),
+      child: Text(textOnNo),
       onPressed: () {
         if (onNoFunction != null) onNoFunction!();
         Navigator.of(context).pop();
@@ -37,8 +37,8 @@ class AlrertDialogYesNo extends StatelessWidget {
     );
 
     return CupertinoAlertDialog(
-      title: Text(this.title),
-      content: Text(this.question),
+      title: Text(title),
+      content: Text(question),
       actions: [
         yesButton,
         noButton,

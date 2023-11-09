@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/responsive/responsive_layout_screen.dart';
@@ -66,6 +65,7 @@ class _SignupScreenState extends State<SignupScreen> {
         username: usernameController.text,
         bio: bioController.text,
         file: image!,
+        isOrganization: true,
       );
     }
     setState(() {

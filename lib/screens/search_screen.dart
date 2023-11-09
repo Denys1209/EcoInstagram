@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/screens/profile_screen.dart';
-import 'package:instagram_clone/widgets/ButtonsRow.dart';
-import 'package:instagram_clone/widgets/shape_button.dart';
 
 import '../utils/colors.dart';
 

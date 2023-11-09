@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/models/user.dart' as model;
 import 'package:instagram_clone/classes/Medal.dart';
 
 class MedalWidget extends StatelessWidget {
   final Map<String, dynamic> user;
   final Medal theMedal;
-  MedalWidget({super.key, required this.user, required this.theMedal});
+  const MedalWidget({super.key, required this.user, required this.theMedal});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.1,
       child: Center(
         child: Column(
@@ -21,13 +20,13 @@ class MedalWidget extends StatelessWidget {
                   backgroundImage: AssetImage(theMedal.image),
                   backgroundColor: Colors.transparent,
                 ),
-                Container(
+                SizedBox(
                   width: 60.0, // Same as CircleAvatar radius * 2
                   height: 60.0, // Same as CircleAvatar radius * 2
                   child: CircularProgressIndicator(
                     value: theMedal.getProgress(user),
                     backgroundColor: Colors.black,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
                   ),
                 ),
               ],

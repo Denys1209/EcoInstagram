@@ -1,17 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:instagram_clone/models/user.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
-import 'package:instagram_clone/resources/storage_methods.dart';
 import 'package:instagram_clone/screens/comments_screen.dart';
+import 'package:instagram_clone/screens/map_screen_for_clean_event_screen.dart';
 import 'package:instagram_clone/screens/user_on_event_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
-import 'package:instagram_clone/widgets/follow_button.dart';
+import 'package:instagram_clone/widgets/shape_button.dart';
 import 'package:instagram_clone/widgets/like_animation.dart';
 import 'package:instagram_clone/widgets/photos_display_list.dart';
 import 'package:intl/intl.dart';
@@ -30,8 +29,8 @@ class _CleanEventScreenState extends State<CleanEventScreen> {
   int _commentLen = 0;
   late User _user;
   bool? _isSubscribed;
-  List<String> _urls = List.empty(growable: true);
-  List<Uint8List> _photos = List.empty(growable: true);
+  final List<String> _urls = List.empty(growable: true);
+  final List<Uint8List> _photos = List.empty(growable: true);
 
   Future<Uint8List> _downloadImageAsBytes(String url) async {
     final response = await http.get(Uri.parse(url));
@@ -274,8 +273,13 @@ class _CleanEventScreenState extends State<CleanEventScreen> {
                 ),
                 IconButton(
                   onPressed: () {
-
-
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => MapScreenForCleanEvent(
+                          polltuionPointsIds: widget.snap['points'],
+                        ),
+                      ),
+                    );
                   },
                   icon: const Icon(Icons.map_outlined),
                 ),
@@ -358,7 +362,7 @@ class _CleanEventScreenState extends State<CleanEventScreen> {
                 ],
               ),
             ),
-            FollowButton(
+            ShapeButton(
               backgroundColor:
                   _isSubscribed! ? mobileBackgroundColor : Colors.blue,
               borderColor: primaryColor,

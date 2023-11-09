@@ -20,6 +20,7 @@ class TextFieldInpute extends StatelessWidget {
     return TextField(
       controller: textEditingController,
       decoration: InputDecoration(
+          
           hintText: hintText,
           border: inputBorder,
           focusedBorder: inputBorder,
@@ -28,6 +29,7 @@ class TextFieldInpute extends StatelessWidget {
           contentPadding: const EdgeInsets.all(8)),
       keyboardType: textInputType,
       obscureText: isPass,
+      autocorrect: false,
     );
   }
 }

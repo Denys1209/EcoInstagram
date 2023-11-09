@@ -13,7 +13,7 @@ class EventClean {
   final String id;
   final double LAT;
   final double LNG;
-  final likes;
+  final List likes;
 
   EventClean({
     required this.name,

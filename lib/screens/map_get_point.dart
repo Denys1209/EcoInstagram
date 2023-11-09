@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:instagram_clone/screens/alocate_map.dart';
 import 'package:instagram_clone/screens/create_event_screen.dart';
 import 'package:latlong2/latlong.dart';
@@ -52,10 +51,10 @@ class _ScreenGetPointOnState extends State<ScreenGetPointOnMap> {
                             width: 80.0,
                             height: 80.0,
                             point: _touchedPoint!,
-                            builder: (ctx) => Container(
+                            builder: (ctx) => const SizedBox(
                               width: 30,
                               height: 50,
-                              child: const Icon(
+                              child: Icon(
                                 Icons.flag,
                                 color: Colors.blue,
                                 size: 40,
@@ -91,12 +90,12 @@ class _ScreenGetPointOnState extends State<ScreenGetPointOnMap> {
  
                               }
                             },
-                            child: Icon(Icons.place),
                             backgroundColor: Colors.green,
+                            child: const Icon(Icons.place),
                           ),
                         ),
                       )
-                    : Text(''),
+                    : const Text(''),
               ],
             ),
           ],

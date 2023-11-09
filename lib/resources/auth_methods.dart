@@ -42,6 +42,7 @@ class AuthMethods {
     required String username,
     required String bio,
     required Uint8List file,
+    required bool isOrganization,
   }) async {
     AuthErrors res = AuthErrors.ArentFillAllFields;
     try {
@@ -66,6 +67,7 @@ class AuthMethods {
           howManyPollutionPointsWereCreted: 0,
           howManyCleanEventsWereVisited: 0,
           howManyEventsWereVisited: 0,
+          isOrganization: isOrganization,
         );
 
         await _firestore.collection('users').doc(cred.user!.uid).set(

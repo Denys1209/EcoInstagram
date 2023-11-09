@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/screens/events_display_screen.dart';
-import 'package:instagram_clone/screens/event_screeen.dart';
 import 'package:instagram_clone/screens/map_screen.dart';
+import 'package:instagram_clone/screens/post_screen_display.dart';
 import 'package:instagram_clone/screens/profile_screen.dart';
 import 'package:instagram_clone/screens/search_screen.dart';
 
@@ -14,7 +13,7 @@ List<Widget> homeScreenItems = [
   const mapScreen(),
   const SearchScreen(),
   const Text('add'),
-  const EventsDisplayScreeen(),
+  const PostScreenDisplay(),
   ProfileScreen(
     uid: FirebaseAuth.instance.currentUser!.uid,
   ),

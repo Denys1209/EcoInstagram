@@ -7,7 +7,7 @@ import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/responsive/mobile_screen_layout.dart';
 import 'package:instagram_clone/utils/colors.dart';
-import 'package:instagram_clone/widgets/follow_button.dart';
+import 'package:instagram_clone/widgets/shape_button.dart';
 import 'package:instagram_clone/widgets/photos_display_list.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -26,8 +26,8 @@ class CreateEventCleanScreen extends StatefulWidget {
 }
 
 class _CreateEventCleanScreenState extends State<CreateEventCleanScreen> {
-  List<Uint8List> _photos = List.empty(growable: true);
-  List<String> _urls = List.empty(growable: true);
+  final List<Uint8List> _photos = List.empty(growable: true);
+  final List<String> _urls = List.empty(growable: true);
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
   final TextEditingController _description = TextEditingController();
@@ -128,7 +128,7 @@ class _CreateEventCleanScreenState extends State<CreateEventCleanScreen> {
                         _selectedTime = newTime;
                       });
                     },
-                    icon: Icon(Icons.access_time),
+                    icon: const Icon(Icons.access_time),
                   ),
                   Text(
                     '${_selectedTime.hour}:${_selectedTime.minute}',
@@ -138,21 +138,21 @@ class _CreateEventCleanScreenState extends State<CreateEventCleanScreen> {
             ),
             TextField(
               controller: _description,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Type a description',
               ),
               maxLines: 3,
             ),
             Padding(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 top: 30,
               ),
-              child: (_eventName.text != null && _description.text != null)
-                  ? FollowButton(
+              child: (_description.text != null)
+                  ? ShapeButton(
                       backgroundColor: Colors.black,
                       borderColor: Colors.white,
                       function: () {
-                        _selectedDate = new DateTime(
+                        _selectedDate = DateTime(
                             _selectedDate.year,
                             _selectedDate.month,
                             _selectedDate.day,
@@ -173,7 +173,7 @@ class _CreateEventCleanScreenState extends State<CreateEventCleanScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MobileScreenLayout(),
+                            builder: (context) => const MobileScreenLayout(),
                           ),
                         );
                       },

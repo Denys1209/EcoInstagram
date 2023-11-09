@@ -18,13 +18,13 @@ class _mapScreenState extends State<mapScreen> {
   List<Marker> _pollutionPoints = List.empty(growable: true);
   List<Marker> _events = List.empty(growable: true);
   List<Marker> _cleanEvents = List.empty(growable: true);
-  bool _loadEnd = false;
+  final bool _loadEnd = false;
   String _dropdownValue = 'Pollution points';
 
   _getMarks() async {
-    final CollectionReference _collectionRef =
+    final CollectionReference collectionRef =
         FirebaseFirestore.instance.collection('pollutionPoints');
-    QuerySnapshot querySnapshot = await _collectionRef.get();
+    QuerySnapshot querySnapshot = await collectionRef.get();
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     List<Marker> marks = List.empty(growable: true);
     for (var i in allData) {
@@ -47,9 +47,9 @@ class _mapScreenState extends State<mapScreen> {
   }
 
   _getEvents() async {
-    final CollectionReference _collectionRef =
+    final CollectionReference collectionRef =
         FirebaseFirestore.instance.collection('events');
-    QuerySnapshot querySnapshot = await _collectionRef.get();
+    QuerySnapshot querySnapshot = await collectionRef.get();
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     List<Marker> events = List.empty(growable: true);
     for (var i in allData) {
@@ -72,9 +72,9 @@ class _mapScreenState extends State<mapScreen> {
   }
 
   _getCleanEvents() async {
-    final CollectionReference _collectionRef =
+    final CollectionReference collectionRef =
         FirebaseFirestore.instance.collection('cleanEvents');
-    QuerySnapshot querySnapshot = await _collectionRef.get();
+    QuerySnapshot querySnapshot = await collectionRef.get();
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     List<Marker> events = List.empty(growable: true);
     for (var i in allData) {
@@ -97,9 +97,9 @@ class _mapScreenState extends State<mapScreen> {
   }
 
   _getSelectedMarks() {
-    if (_dropdownValue == "Pollution points")
+    if (_dropdownValue == "Pollution points") {
       return _pollutionPoints;
-    else if (_dropdownValue == "Events")
+    } else if (_dropdownValue == "Events")
       return _events;
     else
       return _cleanEvents;
@@ -116,14 +116,13 @@ class _mapScreenState extends State<mapScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Stack(
         children: [
           FlutterMap(
             options: MapOptions(
-              center: LatLng(37, -122),
-              zoom: 13,
+              center: LatLng(50.3, 30.5),
+              zoom: 10,
               maxZoom: 22,
               interactiveFlags:
                   InteractiveFlag.pinchZoom | InteractiveFlag.drag,
@@ -170,7 +169,7 @@ class _mapScreenState extends State<mapScreen> {
                       value: value,
                       child: Text(
                         value,
-                        style: TextStyle(color: blueColor),
+                        style: const TextStyle(color: blueColor),
                       ),
                     );
                   }).toList(),

@@ -19,7 +19,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     if (page != 2) {
       pageController.jumpToPage(page);
     } else {
-      MyShowBottomSheet(context);
+      myShowBottomSheet(context);
     }
   }
 

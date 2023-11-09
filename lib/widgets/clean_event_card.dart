@@ -23,7 +23,7 @@ class _CleanEventCardState extends State<CleanEventCard> {
                 builder: (context) => CleanEventCard(snap: widget.snap),
               ),
             ),
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.1,
         child: Row(
@@ -40,7 +40,7 @@ class _CleanEventCardState extends State<CleanEventCard> {
                 Text(
                   widget.snap['name'],
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
                   ),

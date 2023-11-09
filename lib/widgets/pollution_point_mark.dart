@@ -18,7 +18,7 @@ class _PollutionPointMarkState extends State<PollutionPointMark> {
                 builder: (context) => PollutionPointScreen(snap: widget.snap),
               ),
             ),
-        child: Icon(
+        child: const Icon(
           Icons.location_on,
           color: Colors.blue,
           size: 30,

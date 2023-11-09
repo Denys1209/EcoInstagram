@@ -130,12 +130,12 @@ class _PhotosListDisplayState extends State<PhotosListDisplay> {
           ),
         ),
         widget.canAddPhotos &&
-                (widget.canAddMoreThanOnePhoto || widget.photos.length < 1)
+                (widget.canAddMoreThanOnePhoto || widget.photos.isEmpty)
             ? Align(
                 alignment: Alignment.center,
                 child: IconButton(
                   iconSize: 27,
-                  icon: Icon(Icons.add_a_photo),
+                  icon: const Icon(Icons.add_a_photo),
                   onPressed: () {
                     _selectImage(context);
                   },
@@ -146,10 +146,10 @@ class _PhotosListDisplayState extends State<PhotosListDisplay> {
           top: 0,
           right: 0,
           child: widget.photos.isEmpty
-              ? Text('')
+              ? const Text('')
               : Text(
                   '${_index + 1}/${widget.photos.length}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     backgroundColor: Color.fromRGBO(211, 211, 211, 0.6),
                   ),
                 ),
