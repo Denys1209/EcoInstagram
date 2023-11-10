@@ -26,6 +26,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int howManyPollutionReports = 0;
   int followingCleanEvents = 0;
   int followingEvents = 0;
+  int followers = 0;
+  int following = 0;
   bool isFollowing = false;
   bool isLoading = false;
 
@@ -54,6 +56,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         userData = userSnap.data()!;
         followingCleanEvents = userSnap.data()!['followingCleanEvents'].length;
         followingEvents = userSnap.data()!['followingEvents'].length;
+        followers = userSnap.data()!['followers'].length;
+        following = userSnap.data()!['following'].length;
         isFollowing = userSnap
             .data()!['followers']
             .contains(FirebaseAuth.instance.currentUser!.uid);
@@ -169,6 +173,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               )
                                             }),
                                   ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      buildStatColumn(
+                                        followers,
+                                        "followers",
+                                        () => {
+                                         
+                                        },
+                                      ),
+                                      buildStatColumn(
+                                          following,
+                                          "following",
+                                          () => {
+                                               
+                                              }),
+                                    ],
+                                  ),
                                 ),
                                 Row(
                                   mainAxisAlignment:

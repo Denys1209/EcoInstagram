@@ -67,13 +67,10 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/ic_instagram.svg
-    - assets/achievements/recycle-bin.png
-    - assets/achievements/plant.png
-    - assets/achievements/leaf.png
-    - assets/achievements/o2.png
-    - assets/achievements/recycle.png
-    - assets/achievements/save-nature.png
+    - assets/achievements/for_pollutionPoints/plant.png
+    - assets/achievements/for_pollutionPoints/leaf.png
+    - assets/achievements/for_pollutionPoints/save-nature.png
+    - assets/ic_clean_world.svg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

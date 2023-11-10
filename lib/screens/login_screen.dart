@@ -87,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Container(),
               ),
               SvgPicture.asset(
-                'assets/ic_instagram.svg',
+                'assets/ic_clean_world.svg',
                 color: primaryColor,
                 height: 64,
               ),

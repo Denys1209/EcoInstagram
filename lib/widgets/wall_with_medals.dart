@@ -23,27 +23,25 @@ class _WallWithMedalsState extends State<WallWithMedals> {
           type: MedalTypes.PollutionPointType,
           name: "leaf",
           greaterThan: 10,
-          image: "./assets/achievements/leaf.png"),
+          image: "./assets/achievements/for_pollutionPoints/leaf.png"),
       Medal(
           type: MedalTypes.PollutionPointType,
           name: "plant",
           greaterThan: 50,
-          image: "./assets/achievements/plant.png"),
+          image: "./assets/achievements/for_pollutionPoints/plant.png"),
       Medal(
           type: MedalTypes.PollutionPointType,
           name: "save nature",
           greaterThan: 100,
-          image: "./assets/achievements/save-nature.png"),
+          image: "./assets/achievements/for_pollutionPoints/save-nature.png"),
     ]);
+
+    List<Medal> medalsForUser = [];
+    List<Medal> medalsForOrganization = [];
   }
 
   @override
   Widget build(BuildContext context) {
-    Medal sample = Medal(
-        type: MedalTypes.PollutionPointType,
-        name: "test",
-        greaterThan: 10,
-        image: "./assets/achievements/leaf.png");
     return SingleChildScrollView(
       child: GridView.count(
         shrinkWrap: true,
