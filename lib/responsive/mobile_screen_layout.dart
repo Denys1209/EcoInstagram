@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/models/user.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/gloabal_variables.dart';
-import 'package:instagram_clone/widgets/myShowBottomSheet.dart';
+import 'package:instagram_clone/widgets/show_bottom_sheet_for_organization.dart';
+import 'package:instagram_clone/widgets/show_bottom_sheet_for_user.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/user_provider.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
@@ -13,13 +18,17 @@ class MobileScreenLayout extends StatefulWidget {
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   int _page = 0;
+  late User user;
   late PageController pageController;
 
   void navigationTab(int page) {
     if (page != 2) {
       pageController.jumpToPage(page);
     } else {
-      myShowBottomSheet(context);
+      if (user.isOrganization)
+        showBottomSheetForOrganization(context);
+      else
+        showBottomSheetForUser(context);
     }
   }
 
@@ -44,6 +53,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
+    user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),

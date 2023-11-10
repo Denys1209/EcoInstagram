@@ -35,19 +35,23 @@ class _PostCardState extends State<PostCard> {
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
+            Align(
+
+              alignment: Alignment.centerLeft,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: InkWell(
                       onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ProfileScreen(
-                          uid: widget.post.userId,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(
+                            uid: widget.post.userId,
+                          ),
                         ),
                       ),
-                    ),
                       child: CircleAvatar(
                         backgroundColor: Colors.grey,
                         backgroundImage: NetworkImage(
@@ -56,18 +60,22 @@ class _PostCardState extends State<PostCard> {
                         radius: 20,
                       ),
                     ),
-                    ),
-                Text(widget.post.userName),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                      "${widget.post.postDate.toLocal().toString().split(":")[0]}:${widget.post.postDate.toLocal().toString().split(":")[1]}"),
-                )
-              ],
+                  ),
+                  Text(widget.post.userName),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(
+                        "${widget.post.postDate.toLocal().toString().split(":")[0]}:${widget.post.postDate.toLocal().toString().split(":")[1]}"),
+                  )
+                ],
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextColumn(text: widget.post.message),
+              padding: const EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextColumn(text: widget.post.message),
+              ),
             ),
             Row(
               children: [

@@ -84,31 +84,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Row(
                       children: [
-                        IconButton(
-                          iconSize: 24,
-                          icon: const Icon(
-                            Icons.logout,
-                          ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlrertDialogYesNo(
-                                  onNoFunction: null,
-                                  onYesFunction: () {
-                                    AuthMethods().signOut();
-                                    Navigator.of(context).pop();
-                                  },
-                                  question:
-                                      "Are you sure, that you want to sign out",
-                                  textOnNo: "No",
-                                  textOnYes: "Yes",
-                                  title: "sign out",
-                                );
-                              },
-                            );
-                          },
-                        ),
+                        widget.uid == user.uid
+                            ? IconButton(
+                                iconSize: 24,
+                                icon: const Icon(
+                                  Icons.logout,
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlrertDialogYesNo(
+                                        onNoFunction: null,
+                                        onYesFunction: () {
+                                          AuthMethods().signOut();
+                                        },
+                                        question:
+                                            "Are you sure, that you want to sign out",
+                                        textOnNo: "No",
+                                        textOnYes: "Yes",
+                                        title: "sign out",
+                                      );
+                                    },
+                                  );
+                                },
+                              )
+                            : Container(),
                       ],
                     )
                   ]),
@@ -142,17 +143,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     buildStatColumn(howManyPollutionReports,
                                         "reports", null),
                                     buildStatColumn(
-                                        followingCleanEvents,
-                                        "events",
-                                        () => {
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EventsDisplayScreeen(
-                                                          userData: userData,
-                                                        )),
-                                              )
-                                            }),
+                                      followingCleanEvents,
+                                      "events",
+                                      () => {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                EventsDisplayScreeen(
+                                              userData: userData,
+                                            ),
+                                          ),
+                                        ),
+                                      },
+                                    ),
                                     buildStatColumn(
                                         followingEvents,
                                         "clean events",

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/screens/add_pollution_point_screen.dart';
 import 'package:instagram_clone/screens/create_post_screen.dart';
@@ -5,7 +6,7 @@ import 'package:instagram_clone/screens/map_get_point.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/widgets/buttom_with_icon.dart';
 
-void myShowBottomSheet(BuildContext context) {
+void showBottomSheetForOrganization(BuildContext context) {
   showModalBottomSheet(
     context: context,
     enableDrag: true,
@@ -32,21 +33,21 @@ void myShowBottomSheet(BuildContext context) {
                 ),
               ),
               ButtonWithIcon(
-                  icon: const IconData(0xe752, fontFamily: 'MaterialIcons'),
+                  icon: IconData(0xe752, fontFamily: 'MaterialIcons'),
                   text: "craete a pollution report",
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const AddScreenPollutionPoint()));
                   }),
               ButtonWithIcon(
-                  icon: const IconData(0xf643, fontFamily: 'MaterialIcons'),
+                  icon: IconData(0xf643, fontFamily: 'MaterialIcons'),
                   text: "create a clean event",
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const ScreenGetPointOnMap()));
                   }),
               ButtonWithIcon(
-                  icon: const IconData(0xe122, fontFamily: 'MaterialIcons'),
+                  icon: IconData(0xe122, fontFamily: 'MaterialIcons'),
                   text: "create an event",
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -55,7 +56,7 @@ void myShowBottomSheet(BuildContext context) {
                             )));
                   }),
               ButtonWithIcon(
-                  icon: const IconData(0xe752, fontFamily: 'MaterialIcons'),
+                  icon: IconData(0xe752, fontFamily: 'MaterialIcons'),
                   text: "craete a post",
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(

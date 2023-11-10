@@ -10,6 +10,7 @@ import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/gloabal_variables.dart';
 import 'package:instagram_clone/utils/utils.dart';
+import 'package:instagram_clone/widgets/my_check_box.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -26,6 +27,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController usernameController = TextEditingController();
   Uint8List? image;
   bool _isLoading = false;
+  bool _isOrganization = false;
 
   @override
   void dispose() {
@@ -65,7 +67,7 @@ class _SignupScreenState extends State<SignupScreen> {
         username: usernameController.text,
         bio: bioController.text,
         file: image!,
-        isOrganization: true,
+        isOrganization: _isOrganization,
       );
     }
     setState(() {
@@ -191,6 +193,16 @@ class _SignupScreenState extends State<SignupScreen> {
                 textInputType: TextInputType.text,
                 textEditingController: bioController,
               ),
+              const SizedBox(
+                height: 24,
+              ),
+              MyCheckbox(
+                  onChage: (value) {
+                    setState(() {
+                      _isOrganization = value;
+                    });
+                  },
+                  text: "is organization"),
               const SizedBox(
                 height: 24,
               ),
