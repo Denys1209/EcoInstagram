@@ -1,8 +1,8 @@
-
 enum MedalTypes {
   EventType,
   CleanEventType,
   PollutionPointType,
+  FollowersType,
 }
 
 class Medal {
@@ -34,18 +34,21 @@ class Medal {
         if (user["howManyCleanEventsWereVisited"] / onePiece >= 100) {
           progress = 1.0;
         } else {
-          progress =
-              user["howManyCleanEventsWereVisited"] / onePiece / 100;
+          progress = user["howManyCleanEventsWereVisited"] / onePiece / 100;
         }
         break;
       case MedalTypes.PollutionPointType:
-        if (user["howManyPollutionPointsWereCreted"] / onePiece >=
-            100) {
+        if (user["howManyPollutionPointsWereCreted"] / onePiece >= 100) {
           progress = 1.0;
         } else {
-          progress = user["howManyPollutionPointsWereCreted"] /
-              onePiece /
-              100;
+          progress = user["howManyPollutionPointsWereCreted"] / onePiece / 100;
+        }
+        break;
+      case MedalTypes.FollowersType:
+        if (user["followers"].length / onePiece >= 100) {
+          progress = 1.0;
+        } else {
+          progress = user["followers"].length / onePiece / 100;
         }
         break;
     }

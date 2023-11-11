@@ -67,9 +67,24 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/achievements/for_pollutionPoints/plant.png
-    - assets/achievements/for_pollutionPoints/leaf.png
-    - assets/achievements/for_pollutionPoints/save-nature.png
+    - assets/achievements/for_pollutionPoints/pollutionPoints_level_1.png
+    - assets/achievements/for_pollutionPoints/pollutionPoints_level_2.png
+    - assets/achievements/for_pollutionPoints/pollutionPoints_level_3.png
+    - assets/achievements/for_created_clean_events/created_clean_events_level_1.png
+    - assets/achievements/for_created_clean_events/created_clean_events_level_2.png
+    - assets/achievements/for_created_clean_events/created_clean_events_level_3.png
+    - assets/achievements/for_created_events/created_events_level_1.png
+    - assets/achievements/for_created_events/created_events_level_2.png
+    - assets/achievements/for_created_events/created_events_level_3.png
+    - assets/achievements/for_followers/followers_level_1.png
+    - assets/achievements/for_followers/followers_level_2.png
+    - assets/achievements/for_followers/followers_level_3.png
+    - assets/achievements/for_visited_clean_events/visited_clean_events_level_1.png
+    - assets/achievements/for_visited_clean_events/visited_clean_events_level_2.png
+    - assets/achievements/for_visited_clean_events/visited_clean_events_level_3.png
+    - assets/achievements/for_visited_events/visited_events_level_1.png
+    - assets/achievements/for_visited_events/visited_events_level_2.png
+    - assets/achievements/for_visited_events/visited_events_level_3.png
     - assets/ic_clean_world.svg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

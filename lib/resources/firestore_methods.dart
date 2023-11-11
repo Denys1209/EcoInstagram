@@ -288,6 +288,7 @@ class FirestoreMethods {
       });
       _firestore.collection(USERS).doc(userId).update({
         'followingEvents': FieldValue.arrayUnion([eventId]),
+        'howManyEventsWereVisited': FieldValue.increment(1),
       });
 
       subs.add(userId);
@@ -310,6 +311,7 @@ class FirestoreMethods {
       });
       _firestore.collection(USERS).doc(userId).update({
         'followingCleanEvents': FieldValue.arrayUnion([enventId]),
+        'howManyCleanEventsWereVisited': FieldValue.increment(1),
       });
 
       subs.add(userId);
@@ -339,8 +341,8 @@ class FirestoreMethods {
     }
   }
 
-  Future<void> uploadPost(String userName, String message, String userId,
-      String profImage) async {
+  Future<void> uploadPost(
+      String userName, String message, String userId, String profImage) async {
     try {
       String postId = const Uuid().v1();
       await _firestore.collection(POSTS).add({
