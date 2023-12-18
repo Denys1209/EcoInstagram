@@ -36,7 +36,6 @@ class _PostCardState extends State<PostCard> {
         child: Column(
           children: [
             Align(
-
               alignment: Alignment.centerLeft,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -71,7 +70,8 @@ class _PostCardState extends State<PostCard> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding:
+                  const EdgeInsets.only(left: 16.0, bottom: 16.0, right: 16.0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: TextColumn(text: widget.post.message),

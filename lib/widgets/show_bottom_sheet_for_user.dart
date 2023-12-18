@@ -32,7 +32,7 @@ void showBottomSheetForUser(BuildContext context) {
                 ),
               ),
               ButtonWithIcon(
-                  icon: IconData(0xe752, fontFamily: 'MaterialIcons'),
+                  icon: IconData(0xee78, fontFamily: 'MaterialIcons'),
                   text: "craete a pollution report",
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(

@@ -23,16 +23,20 @@ class AlrertDialogYesNo extends StatelessWidget {
     Widget yesButton = TextButton(
       child: Text(textOnYes),
       onPressed: () {
-        if (onYesFunction != null) onYesFunction!();
-        Navigator.of(context).pop();
+        if (onYesFunction != null)
+          onYesFunction!();
+        else
+          Navigator.of(context).pop();
       },
     );
 
     Widget noButton = TextButton(
       child: Text(textOnNo),
       onPressed: () {
-        if (onNoFunction != null) onNoFunction!();
-        Navigator.of(context).pop();
+        if (onNoFunction != null)
+          onNoFunction!();
+        else
+          Navigator.of(context).pop();
       },
     );
 

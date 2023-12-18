@@ -5,6 +5,7 @@ import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/screens/events_display_screen.dart';
+import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/alert_dialog_yes_no.dart';
@@ -83,8 +84,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      userData["username"],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          userData["username"],
+                        ),
+                        userData["isOrganization"]
+                            ? const Icon(
+                                IconData(0xee9b, fontFamily: 'MaterialIcons'),
+                              )
+                            : Text(""),
+                      ],
                     ),
                     Row(
                       children: [
@@ -102,6 +113,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         onNoFunction: null,
                                         onYesFunction: () {
                                           AuthMethods().signOut();
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const LoginScreen()));
                                         },
                                         question:
                                             "Are you sure, that you want to sign out",
@@ -147,13 +163,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     buildStatColumn(howManyPollutionReports,
                                         "reports", null),
                                     buildStatColumn(
-                                      followingCleanEvents,
+                                      followingEvents,
                                       "events",
                                       () => {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 EventsDisplayScreeen(
+                                              choosenType: "Events",
                                               userData: userData,
                                             ),
                                           ),
@@ -161,13 +178,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       },
                                     ),
                                     buildStatColumn(
-                                        followingEvents,
+                                        followingCleanEvents,
                                         "clean events",
                                         () => {
                                               Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         EventsDisplayScreeen(
+                                                          choosenType:
+                                                              "Clean events",
                                                           userData: userData,
                                                         )),
                                               )
@@ -184,16 +203,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       buildStatColumn(
                                         followers,
                                         "followers",
-                                        () => {
-                                         
-                                        },
+                                        () => {},
                                       ),
                                       buildStatColumn(
-                                          following,
-                                          "following",
-                                          () => {
-                                               
-                                              }),
+                                          following, "following", () => {}),
                                     ],
                                   ),
                                 ),

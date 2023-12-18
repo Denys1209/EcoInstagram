@@ -56,7 +56,7 @@ void showBottomSheetForOrganization(BuildContext context) {
                             )));
                   }),
               ButtonWithIcon(
-                  icon: IconData(0xe752, fontFamily: 'MaterialIcons'),
+                  icon: IconData(0xee78, fontFamily: 'MaterialIcons'),
                   text: "craete a post",
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(

@@ -104,7 +104,7 @@ class _AddScreenPollutionPointState extends State<AddScreenPollutionPoint> {
                       function: () {
                         postPoint(user.uid, user.username, user.photoUrl);
                       },
-                      text: "create a new polution point",
+                      text: "create a new pollution point",
                       textColor: Colors.white,
                       width: MediaQuery.of(context).size.width * 0.8,
                     ),
